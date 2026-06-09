@@ -1,7 +1,9 @@
+import SignInForm from "../../features/auth/components/SignInForm";
+
 export default function SignIn() {
   return (
-    <div>
-      <h1>Sign In</h1>
-    </div>
+    <section className="w-full h-full flex items-center justify-center">
+      <SignInForm />
+    </section>
   );
 }
