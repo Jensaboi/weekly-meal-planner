@@ -1,7 +1,9 @@
+import SignUpForm from "@/features/auth/components/SignUpForm";
+
 export default function SignUp() {
   return (
-    <div>
-      <h1>Sign Up</h1>
-    </div>
+    <section className="w-full h-full flex items-center justify-center">
+      <SignUpForm />
+    </section>
   );
 }
