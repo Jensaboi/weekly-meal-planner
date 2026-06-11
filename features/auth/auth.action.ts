@@ -101,3 +101,14 @@ export async function signUpAction(
 
   redirect("/dashboard");
 }
+
+export async function signOutAction(prevState: unknown, formData: FormData) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+  } else {
+    redirect("/");
+  }
+}
