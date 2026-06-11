@@ -4,7 +4,7 @@ import MainNavigation from "./MainNavigation";
 import MobileNavigation from "./MobileNavigation";
 import Logo from "@/public/Logo";
 
-export default function Header({ user = false }) {
+export default function Header({ user }) {
   return (
     <header className="p-4 flex justify-between items-center">
       <div className="flex items-center">
