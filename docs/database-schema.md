@@ -1,17 +1,18 @@
 # Supabase database schema
 
-# ingredients
+# ingredients, future table
 
 id
 name
 foodex2
+cooking
 
-# food_categories
+# food_categories, future table
 
 id
 name
 
-# foods
+# foods, future table
 
 id
 livsmedels_id
@@ -23,10 +24,10 @@ sugar
 fiber
 category_id (FK food_categories)
 
-# food_ingredients
+# food_ingredients, future table
 
-food_id (FK foods)
-ingredient_id (FK ingredients)
+food_id not null(FK foods)
+ingredient_id not null(FK ingredients)
 percentage
 cooking
 
@@ -39,21 +40,16 @@ description
 cooking_time
 prep_time
 portions
-img_path
 status (public, private)
 created_at
 updated_at
-
-# recipe_images ?
-
-Add later?
 
 # recipe_ingredients
 
 id
 recipe_id (FK recipes)
-food_id (FK foods)
-display_name
+food_id nullable (FK foods)
+name
 unit
 quantity
 
@@ -74,10 +70,19 @@ author_id
 created_at
 updated_at
 
+# recipe_images
+
+id
+recipe_id
+is_default
+img_path
+created_at
+
 # meals
 
 id
 user_id (FK users)
+household_id nullable
 recipe_id (FK recipes)
 meal_type
 date
@@ -87,8 +92,22 @@ created_at
 
 id
 user_id (FK users)
-food_id (FK foods)
-amount
+household_id nullable( FK households)
 name
+quantity
 unit
 checked
+
+# households
+
+id
+name
+created_at
+updated_at
+creator_id
+
+# household_members
+
+id
+household_id
+user_id

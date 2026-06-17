@@ -1,0 +1,89 @@
+CREATE TYPE visibility_type AS ENUM ('public', 'private', 'unlisted');
+
+CREATE TYPE meal_type AS ENUM ('dinner', 'lunch', 'breakfast', 'snack');
+
+CREATE TABLE IF NOT EXISTS recipes(
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  author_id uuid NOT NULL REFERENCES auth.users(id),
+  name TEXT NOT NULL,
+  description TEXT NOT NULL,
+  cooking_time INTEGER NOT NULL,
+  prep_time INTEGER NOT NULL,
+  portions INTEGER NOT NULL,
+  visibility visibility_type NOT NULL DEFAULT 'private',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS recipe_ingredients (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  recipe_id BIGINT NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
+  food_id BIGINT DEFAULT NULL,
+  name TEXT NOT NULL,
+  unit text NOT NULL,
+  quantity NUMERIC NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS recipe_instructions (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  recipe_id BIGINT NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
+  step INTEGER NOT NULL,
+  description TEXT NOT NULL,
+  UNIQUE(recipe_id, step)
+);
+
+CREATE TABLE IF NOT EXISTS recipe_reviews (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  recipe_id BIGINT NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
+  rating INTEGER CHECK (rating BETWEEN 1 AND 5),
+  comment TEXT,
+  author_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS recipe_images (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    recipe_id BIGINT NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
+    is_default BOOLEAN DEFAULT FALSE,
+    img_path TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS households (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name TEXT NOT NULL,
+  creator_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS households_members (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  household_id BIGINT NOT NULL REFERENCES households(id) ON DELETE CASCADE,
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  UNIQUE( household_id, user_id )
+);
+
+CREATE TABLE IF NOT EXISTS meals (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  household_id BIGINT REFERENCES households(id) ON DELETE CASCADE,
+  recipe_id BIGINT NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
+  meal_type meal_type NOT NULL,
+  date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS groceries (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  household_id BIGINT REFERENCES households(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  quantity INTEGER NOT NULL,
+  unit TEXT NOT NULL,
+  is_checked BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
