@@ -151,6 +151,13 @@ export type Database = {
             foreignKeyName: "meals_recipe_id_fkey"
             columns: ["recipe_id"]
             isOneToOne: false
+            referencedRelation: "recipe_catalog"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meals_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
             referencedRelation: "recipes"
             referencedColumns: ["id"]
           },
@@ -202,6 +209,13 @@ export type Database = {
             foreignKeyName: "recipe_categories_map_recipe_id_fkey"
             columns: ["recipe_id"]
             isOneToOne: false
+            referencedRelation: "recipe_catalog"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipe_categories_map_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
             referencedRelation: "recipes"
             referencedColumns: ["id"]
           },
@@ -230,6 +244,13 @@ export type Database = {
           recipe_id?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "recipe_images_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipe_catalog"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "recipe_images_recipe_id_fkey"
             columns: ["recipe_id"]
@@ -269,6 +290,13 @@ export type Database = {
             foreignKeyName: "recipe_ingredients_recipe_id_fkey"
             columns: ["recipe_id"]
             isOneToOne: false
+            referencedRelation: "recipe_catalog"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipe_ingredients_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
             referencedRelation: "recipes"
             referencedColumns: ["id"]
           },
@@ -294,6 +322,13 @@ export type Database = {
           step?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "recipe_instructions_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipe_catalog"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "recipe_instructions_recipe_id_fkey"
             columns: ["recipe_id"]
@@ -332,6 +367,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "recipe_reviews_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipe_catalog"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "recipe_reviews_recipe_id_fkey"
             columns: ["recipe_id"]
@@ -382,7 +424,63 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      recipe_catalog: {
+        Row: {
+          author_id: string | null
+          avg_rating: number | null
+          categories: Json | null
+          cooking_time: number | null
+          created_at: string | null
+          description: string | null
+          id: number | null
+          images: Json | null
+          ingredients: Json | null
+          instructions: Json | null
+          name: string | null
+          portions: number | null
+          prep_time: number | null
+          total_reviews: number | null
+          updated_at: string | null
+          visibility: Database["public"]["Enums"]["visibility_type"] | null
+        }
+        Insert: {
+          author_id?: string | null
+          avg_rating?: never
+          categories?: never
+          cooking_time?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: number | null
+          images?: never
+          ingredients?: never
+          instructions?: never
+          name?: string | null
+          portions?: number | null
+          prep_time?: number | null
+          total_reviews?: never
+          updated_at?: string | null
+          visibility?: Database["public"]["Enums"]["visibility_type"] | null
+        }
+        Update: {
+          author_id?: string | null
+          avg_rating?: never
+          categories?: never
+          cooking_time?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: number | null
+          images?: never
+          ingredients?: never
+          instructions?: never
+          name?: string | null
+          portions?: number | null
+          prep_time?: number | null
+          total_reviews?: never
+          updated_at?: string | null
+          visibility?: Database["public"]["Enums"]["visibility_type"] | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
