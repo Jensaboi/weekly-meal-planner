@@ -78,6 +78,17 @@ is_default
 img_path
 created_at
 
+# recipe_categories
+
+id
+type ('dietary' | 'cuisine' | 'course' | 'holiday' | 'method')
+name
+
+# recipe_categories_map
+
+category_id
+recipe_id
+
 # meals
 
 id
@@ -96,7 +107,7 @@ household_id nullable( FK households)
 name
 quantity
 unit
-checked
+is_checked
 
 # households
 
