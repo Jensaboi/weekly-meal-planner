@@ -1,7 +1,9 @@
+import RecipeCatalog from "@/features/recipe/components/RecipeCatalog";
+
 export default function RecipesPage() {
   return (
-    <div>
-      <h1>Recipes</h1>
-    </div>
+    <>
+      <RecipeCatalog />
+    </>
   );
 }
