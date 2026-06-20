@@ -23,7 +23,7 @@ export default function RecipeCard({ recipe }: { recipe: RecipeCardData }) {
   } = supabase.storage.from("recipe_images").getPublicUrl(recipe.image ?? "");
 
   return (
-    <Card>
+    <Card className="w-full h-full">
       <CardHeader className="">
         <div className="relative w-full h-80">
           <Image
