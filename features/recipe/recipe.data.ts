@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { RecipeCardData } from "./recipe.types";
+import { RecipeCardData, RecipeDetailsData } from "./recipe.types";
 
 export async function getRecipes(): Promise<RecipeCardData[]> {
   const supabase = await createClient();
@@ -9,4 +9,32 @@ export async function getRecipes(): Promise<RecipeCardData[]> {
   if (error) throw error;
 
   return data;
+}
+
+export async function getRecipeDetails(
+  id: number,
+): Promise<RecipeDetailsData | null> {
+  if (!id) throw new Error("Recipe id is required.");
+
+  const supabase = await createClient();
+
+  const { error, data } = await supabase
+    .from("recipe_detail")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  return data;
+}
+
+export async function getRecipeImageUrl(path: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("recipe_images").getPublicUrl(path);
+
+  return publicUrl;
 }
