@@ -27,7 +27,7 @@ export default function RecipeFilters() {
   return (
     <div className="flex items-center gap-2 mb-4">
       {filters.map(filter => (
-        <Popover>
+        <Popover key={filter.trigger}>
           <PopoverTrigger asChild>
             <Button variant={"outline"}>{filter.trigger}</Button>
           </PopoverTrigger>
