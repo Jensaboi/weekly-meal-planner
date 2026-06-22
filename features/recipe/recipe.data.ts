@@ -1,5 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
-import { RecipeCardData, RecipeDetailsData } from "./recipe.types";
+import {
+  RecipeCardData,
+  RecipeDetailsData,
+  RecipeReviewData,
+} from "./recipe.types";
 
 export async function getRecipes(): Promise<RecipeCardData[]> {
   const supabase = await createClient();
@@ -23,6 +27,23 @@ export async function getRecipeDetails(
     .select("*")
     .eq("id", id)
     .maybeSingle();
+
+  if (error) throw error;
+
+  return data;
+}
+
+export async function getRecipeReviews(
+  id: number,
+): Promise<RecipeReviewData[]> {
+  if (!id) throw new Error("Recipe id is required");
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("recipe_reviews")
+    .select()
+    .eq("id", id);
 
   if (error) throw error;
 

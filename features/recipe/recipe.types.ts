@@ -16,3 +16,6 @@ export type IngredientData =
 
 export type RecipeImageData =
   Database["public"]["Tables"]["recipe_images"]["Row"];
+
+export type RecipeReviewData =
+  Database["public"]["Tables"]["recipe_reviews"]["Row"];
