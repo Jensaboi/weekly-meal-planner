@@ -19,6 +19,8 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import ReviewStars from "@/components/ReviewStars";
+import { Suspense } from "react";
+import RecipeReviews from "./RecipeReviews";
 
 export default async function RecipeDetails({ id }: { id: number }) {
   const recipe = await getRecipeDetails(id);
@@ -114,6 +116,10 @@ export default async function RecipeDetails({ id }: { id: number }) {
           </ul>
         </div>
       </div>
+
+      <Suspense fallback="Loading...">
+        <RecipeReviews id={id} />
+      </Suspense>
     </section>
   );
 }

@@ -6,6 +6,7 @@ export default async function RecipePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+
   return (
     <>
       <RecipeDetails id={Number(id)} />
