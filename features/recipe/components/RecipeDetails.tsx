@@ -3,6 +3,7 @@ import { getRecipeDetails, getRecipeImageUrl } from "../recipe.data";
 import {
   IngredientData,
   InstructionData,
+  RecipeCategory,
   RecipeImageData,
 } from "../recipe.types";
 import Ingredient from "./Ingredient";
@@ -21,19 +22,20 @@ import Image from "next/image";
 import ReviewStars from "@/components/ReviewStars";
 import { Suspense } from "react";
 import RecipeReviews from "./RecipeReviews";
+import { Badge } from "@/components/ui/badge";
 
 export default async function RecipeDetails({ id }: { id: number }) {
   const recipe = await getRecipeDetails(id);
 
   if (!recipe) return notFound();
 
+  const categories = (recipe.categories as RecipeCategory[]) ?? [];
   const ingredients = (recipe?.ingredients as IngredientData[]) ?? [];
   const instructions = (recipe?.instructions as InstructionData[]) ?? [];
   const images = (recipe?.images as RecipeImageData[]) ?? [];
   const defaultImage = images.find(img => img.is_default) ?? images[0];
   const defaultImageUrl = await getRecipeImageUrl(defaultImage.img_path);
 
-  //Need to update recipe_details view to include categories correctly.
   //Multiple images??
 
   return (
@@ -76,7 +78,11 @@ export default async function RecipeDetails({ id }: { id: number }) {
             </div>
           </div>
 
-          {/* Recipe categories goes here */}
+          <div className="flex items-center gap-2 my-4">
+            {categories.map(category => (
+              <Badge key={category.id}>{category.name}</Badge>
+            ))}
+          </div>
 
           <p className="tracking-wide leading-relaxed">{recipe.description}</p>
 
