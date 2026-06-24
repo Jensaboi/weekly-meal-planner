@@ -1,6 +1,6 @@
 import { getRecipeReviews } from "../recipe.data";
 import Review from "./Review";
-import ReviewRecipeForm from "./ReviewRecipeForm";
+import { ReviewRecipeForm } from "./ReviewRecipeForm";
 
 export default async function RecipeReviews({ id }: { id: number }) {
   const reviews = await getRecipeReviews(id);

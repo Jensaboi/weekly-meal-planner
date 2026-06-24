@@ -1,32 +1,49 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import clsx from "clsx";
-import { Star } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
-import { sendReviewAction } from "../recipe.action";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
-export default function ReviewRecipeForm({ id }: { id: number }) {
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import clsx from "clsx";
+import { Star } from "lucide-react";
+import { sendReviewAction } from "../recipe.action";
+
+export function ReviewRecipeForm({ id }: { id: number }) {
   const [stars, setStars] = useState<number>(0);
+  const [isPending, startTransition] = useTransition();
 
-  const [state, action, isPending] = useActionState(sendReviewAction, null);
+  const toggleStars = (val: number) => {
+    setStars(prev => {
+      if (prev === val) {
+        setStars(0);
+      } else {
+        setStars(val);
+      }
+    });
+  };
 
-  useEffect(() => {
-    if (state?.success) {
-      setStars(0);
-      toast.success("Recipe review created successfully!");
-    }
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    if (state?.error) {
-      toast.warning(state?.error);
-    }
-  }, [state?.success]);
+    const formData = new FormData(e.currentTarget);
+
+    startTransition(async () => {
+      const res = await sendReviewAction(formData);
+
+      if (res.success) {
+        toast.success("Review submitted!");
+        setStars(0);
+        e.currentTarget.reset();
+      } else {
+        toast.error(res.error ?? "Something went wrong");
+      }
+    });
+  };
 
   return (
-    <form action={action} className="flex flex-col gap-2 items-start">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2 items-start">
       <Textarea
         id="comment"
         name="comment"
@@ -42,7 +59,12 @@ export default function ReviewRecipeForm({ id }: { id: number }) {
       <div className="flex items-center gap-2">
         {Array.from({ length: 5 }, (_, i) => {
           return (
-            <button type="button" key={i} onClick={() => setStars(i + 1)}>
+            <button
+              className="hover:cursor-pointer"
+              type="button"
+              key={i}
+              onClick={() => toggleStars(i + 1)}
+            >
               <Star
                 strokeWidth={1}
                 className={clsx(i < stars && "fill-yellow-300")}
