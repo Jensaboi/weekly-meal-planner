@@ -21,7 +21,6 @@ export async function sendReviewAction(prevState: unknown, formData: FormData) {
   const review = NewReview.safeParse(input);
 
   if (!review.success) {
-    console.error(review.error.issues[0].message);
     return { success: false, error: review.error.issues[0].message };
   }
 
@@ -29,12 +28,27 @@ export async function sendReviewAction(prevState: unknown, formData: FormData) {
 
   const { error } = await supabase.from("recipe_reviews").insert(review.data);
 
+  console.log(error);
   if (error) {
-    console.error(error.message);
+    if (error.code === "23514")
+      return {
+        success: false,
+        error: "You must leave a star between 1 - 5 to leave a review.",
+      };
+
+    if (error.code === "23505")
+      return {
+        success: false,
+        error: "You have already left a review for this recipe.",
+      };
+
     return { success: false, error: error.message };
   }
 
   revalidatePath(`/recipes/${review.data.recipe_id}`);
 
-  return { success: true, error: null };
+  return {
+    success: true,
+    error: null,
+  };
 }
