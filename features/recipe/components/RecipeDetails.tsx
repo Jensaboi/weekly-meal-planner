@@ -40,8 +40,17 @@ export default async function RecipeDetails({ id }: { id: number }) {
 
   return (
     <section className="mx-auto container flex flex-col gap-4 lg:gap-8 p-4">
-      <article className="min-h-120 grid md:grid-cols-2 gap-4 lg:gap-8">
-        <div>
+      <article className="min-h-120 grid md:grid-cols-2 gap-4 lg:gap-8 md:[grid-template-areas:'left_right']">
+        <div className="relative h-full min-h-100 w-full md:[grid-area:right]">
+          <Image
+            fill
+            className="object-fit"
+            alt={recipe.name ?? ""}
+            src={defaultImageUrl}
+          />
+        </div>
+
+        <div className="md:[grid-area:left]">
           <h1 className="text-3xl font-bold mb-4">{recipe.name}</h1>
 
           <div className="flex items-center gap-4 mb-4">
@@ -84,7 +93,9 @@ export default async function RecipeDetails({ id }: { id: number }) {
             ))}
           </div>
 
-          <p className="tracking-wide leading-relaxed">{recipe.description}</p>
+          <p className="tracking-wide leading-relaxed mb-12">
+            {recipe.description}
+          </p>
 
           <div className="flex items-center gap-4 my-4">
             <Button size={"lg"}>
@@ -97,9 +108,6 @@ export default async function RecipeDetails({ id }: { id: number }) {
               Save recipe
             </Button>
           </div>
-        </div>
-        <div className="relative h-full w-full">
-          <Image fill alt={recipe.name ?? ""} src={defaultImageUrl} />
         </div>
       </article>
 
