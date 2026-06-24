@@ -6,7 +6,7 @@ import { NewReview } from "./recipe.schema";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function sendReviewAction(prevState: unknown, formData: FormData) {
+export async function sendReviewAction(formData: FormData) {
   const user = await getUser();
 
   if (!user) redirect("/sign-in");
