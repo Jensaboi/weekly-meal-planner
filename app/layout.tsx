@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import { getUser } from "@/features/user/user.data";
+import { Toaster } from "@/components/ui/sonner";
 
 const publicSans = Public_Sans({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -43,6 +44,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Header user={user} />
+        <Toaster />
         <main className="flex-1 flex flex-col w-full h-full">{children}</main>
       </body>
     </html>
