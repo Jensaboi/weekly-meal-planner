@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { Star } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import { sendReviewAction } from "../recipe.action";
+import { toast } from "sonner";
 
 export default function ReviewRecipeForm({ id }: { id: number }) {
   const [stars, setStars] = useState<number>(0);
@@ -14,7 +15,14 @@ export default function ReviewRecipeForm({ id }: { id: number }) {
   const [state, action, isPending] = useActionState(sendReviewAction, null);
 
   useEffect(() => {
-    if (state?.success) setStars(0);
+    if (state?.success) {
+      setStars(0);
+      toast.success("Recipe review created successfully!");
+    }
+
+    if (state?.error) {
+      toast.warning(state?.error);
+    }
   }, [state?.success]);
 
   return (
