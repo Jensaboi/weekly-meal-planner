@@ -42,8 +42,8 @@ export async function getRecipeReviews(
 
   const { data, error } = await supabase
     .from("recipe_reviews")
-    .select()
-    .eq("id", id);
+    .select("*")
+    .eq("recipe_id", id);
 
   if (error) throw error;
 

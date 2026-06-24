@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
-  PopoverHeader,
   PopoverTrigger,
 } from "@/components/ui/popover";
 
@@ -25,7 +24,7 @@ export default function RecipeFilters() {
   ];
 
   return (
-    <div className="flex items-center gap-2 mb-4">
+    <div className="flex items-center gap-2 my-2 overflow-x-scroll pb-4">
       {filters.map(filter => (
         <Popover key={filter.trigger}>
           <PopoverTrigger asChild>

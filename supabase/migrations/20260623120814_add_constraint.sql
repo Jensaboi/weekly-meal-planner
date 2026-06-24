@@ -1,0 +1,1 @@
+ALTER TABLE IF EXISTS recipe_reviews ALTER COLUMN rating SET NOT NULL;

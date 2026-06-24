@@ -1,0 +1,1 @@
+ALTER TABLE IF EXISTS recipe_reviews ADD CONSTRAINT recipe_reviews_author_recipe_unique UNIQUE (author_id, recipe_id);
