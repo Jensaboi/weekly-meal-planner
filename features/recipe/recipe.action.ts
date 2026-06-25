@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { getUser } from "../user/user.data";
-import { NewReview } from "./recipe.schema";
+import { NewRecipe, NewReview } from "./recipe.schema";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
@@ -51,4 +51,10 @@ export async function sendReviewAction(formData: FormData) {
     success: true,
     error: null,
   };
+}
+
+export async function createRecipeAction(formData: FormData) {
+  const input = Object.fromEntries(formData);
+
+  const recipe = NewRecipe.safeParse(input);
 }
