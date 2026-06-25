@@ -23,6 +23,7 @@ import ReviewStars from "@/components/ReviewStars";
 import { Suspense } from "react";
 import RecipeReviews from "./RecipeReviews";
 import { Badge } from "@/components/ui/badge";
+import PlanMealModal from "@/features/meal/components/PlanMealModal";
 
 export default async function RecipeDetails({ id }: { id: number }) {
   const recipe = await getRecipeDetails(id);
@@ -98,10 +99,7 @@ export default async function RecipeDetails({ id }: { id: number }) {
           </p>
 
           <div className="flex items-center gap-4 my-4">
-            <Button size={"lg"}>
-              <Calendar />
-              Plan as a meal
-            </Button>
+            <PlanMealModal recipeId={id} />
 
             <Button variant={"secondary"} size={"lg"}>
               <Heart />
