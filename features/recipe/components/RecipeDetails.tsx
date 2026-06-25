@@ -10,7 +10,6 @@ import Ingredient from "./Ingredient";
 import Instruction from "./Instruction";
 import { Button } from "@/components/ui/button";
 import {
-  Calendar,
   Clock,
   CookingPot,
   Ham,
@@ -99,7 +98,7 @@ export default async function RecipeDetails({ id }: { id: number }) {
           </p>
 
           <div className="flex items-center gap-4 my-4">
-            <PlanMealModal recipeId={id} />
+            <PlanMealModal householdId={null} recipeId={id} />
 
             <Button variant={"secondary"} size={"lg"}>
               <Heart />
