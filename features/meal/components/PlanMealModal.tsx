@@ -15,11 +15,26 @@ import { addDays } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { planMealAction } from "../meal.action";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import useToggle from "@/hooks/useToggle";
+import { toast } from "sonner";
 
-export default function PlanMealModal({ recipeId }: { recipeId: number }) {
-  const [date, setDate] = useState<Date | undefined>(
-    new Date(new Date().getFullYear(), 1, 12),
-  );
+export default function PlanMealModal({
+  recipeId = null,
+  householdId = null,
+}: {
+  recipeId: number | null;
+  householdId: number | null;
+}) {
+  const { isOpen, setIsOpen } = useToggle();
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const [currentMonth, setCurrentMonth] = useState<Date>(
     new Date(new Date().getFullYear(), new Date().getMonth(), 1),
   );
@@ -40,10 +55,17 @@ export default function PlanMealModal({ recipeId }: { recipeId: number }) {
     {
       /* do stuff with the response */
     }
+    if (res.success) {
+      setIsOpen(false);
+      toast.success("Successfully planed recipe as meal!");
+    }
+    if (!res.success) {
+      toast.error(res.error);
+    }
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button className="hover:cursor-pointer" size={"lg"}>
           <CalendarIcon /> Plan as meal
@@ -87,6 +109,38 @@ export default function PlanMealModal({ recipeId }: { recipeId: number }) {
               ))}
             </div>
             <form onSubmit={handleSubmit}>
+              <Input
+                type="hidden"
+                name="recipeId"
+                id="recipeId"
+                value={recipeId ?? ""}
+              />
+              <Input
+                type="hidden"
+                name="householdId"
+                id="householdId"
+                value={householdId ?? ""}
+              />
+
+              <Input
+                type="hidden"
+                name="date"
+                id="date"
+                value={date?.toISOString() ?? ""}
+              />
+
+              <Select name="mealType">
+                <SelectTrigger className="mb-4">
+                  <SelectValue placeholder="Select a course" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="breakfast">Breakfast</SelectItem>
+                  <SelectItem value="lunch">Lunch</SelectItem>
+                  <SelectItem value="dinner">Dinner</SelectItem>
+                  <SelectItem value="snack">Snack</SelectItem>
+                </SelectContent>
+              </Select>
+
               <Button
                 type="submit"
                 size={"lg"}
