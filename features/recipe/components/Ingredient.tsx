@@ -9,7 +9,12 @@ export default function Ingredient({
   return (
     <Item asChild variant={"outline"}>
       <li>
-        <ItemDescription>{ingredient.name}</ItemDescription>
+        <ItemDescription>
+          <strong>
+            {ingredient.quantity} {ingredient.unit}
+          </strong>{" "}
+          {ingredient.name}
+        </ItemDescription>
       </li>
     </Item>
   );
