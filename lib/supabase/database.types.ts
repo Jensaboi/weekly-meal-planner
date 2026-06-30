@@ -53,6 +53,13 @@ export type Database = {
             foreignKeyName: "groceries_household_id_fkey";
             columns: ["household_id"];
             isOneToOne: false;
+            referencedRelation: "household_view";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "groceries_household_id_fkey";
+            columns: ["household_id"];
+            isOneToOne: false;
             referencedRelation: "households";
             referencedColumns: ["id"];
           },
@@ -63,6 +70,7 @@ export type Database = {
           created_at: string;
           creator_id: string;
           id: number;
+          invite_code: string;
           name: string;
           updated_at: string;
         };
@@ -70,6 +78,7 @@ export type Database = {
           created_at?: string;
           creator_id: string;
           id?: never;
+          invite_code?: string;
           name: string;
           updated_at?: string;
         };
@@ -77,6 +86,7 @@ export type Database = {
           created_at?: string;
           creator_id?: string;
           id?: never;
+          invite_code?: string;
           name?: string;
           updated_at?: string;
         };
@@ -86,19 +96,29 @@ export type Database = {
         Row: {
           household_id: number;
           id: number;
+          role: Database["public"]["Enums"]["role_type"];
           user_id: string;
         };
         Insert: {
           household_id: number;
           id?: never;
+          role?: Database["public"]["Enums"]["role_type"];
           user_id: string;
         };
         Update: {
           household_id?: number;
           id?: never;
+          role?: Database["public"]["Enums"]["role_type"];
           user_id?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "households_members_household_id_fkey";
+            columns: ["household_id"];
+            isOneToOne: false;
+            referencedRelation: "household_view";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "households_members_household_id_fkey";
             columns: ["household_id"];
@@ -140,6 +160,13 @@ export type Database = {
           user_id?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "meals_household_id_fkey";
+            columns: ["household_id"];
+            isOneToOne: false;
+            referencedRelation: "household_view";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "meals_household_id_fkey";
             columns: ["household_id"];
@@ -228,6 +255,49 @@ export type Database = {
           },
           {
             foreignKeyName: "recipe_categories_map_recipe_id_fkey";
+            columns: ["recipe_id"];
+            isOneToOne: false;
+            referencedRelation: "recipes";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      recipe_favorites: {
+        Row: {
+          created_at: string;
+          id: number;
+          recipe_id: number;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: never;
+          recipe_id: number;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: never;
+          recipe_id?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "recipe_favorites_recipe_id_fkey";
+            columns: ["recipe_id"];
+            isOneToOne: false;
+            referencedRelation: "recipe_card";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "recipe_favorites_recipe_id_fkey";
+            columns: ["recipe_id"];
+            isOneToOne: false;
+            referencedRelation: "recipe_details";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "recipe_favorites_recipe_id_fkey";
             columns: ["recipe_id"];
             isOneToOne: false;
             referencedRelation: "recipes";
@@ -466,6 +536,19 @@ export type Database = {
       };
     };
     Views: {
+      household_view: {
+        Row: {
+          created_at: string | null;
+          creator_id: string | null;
+          id: number | null;
+          invite_code: string | null;
+          members: Json | null;
+          name: string | null;
+          updated_at: string | null;
+          user_id: string | null;
+        };
+        Relationships: [];
+      };
       recipe_card: {
         Row: {
           author_id: string | null;
@@ -576,11 +659,16 @@ export type Database = {
       };
     };
     Functions: {
-      [_ in never]: never;
+      create_household_and_add_owner: {
+        Args: { name: string; user_id: string };
+        Returns: number;
+      };
+      leave_household: { Args: never; Returns: undefined };
     };
     Enums: {
       meal_type: "dinner" | "lunch" | "breakfast" | "snack";
       recipe_type: "dietary" | "cuisine" | "course" | "holiday" | "method";
+      role_type: "owner" | "admin" | "member";
       visibility_type: "public" | "private" | "unlisted";
     };
     CompositeTypes: {
@@ -714,6 +802,7 @@ export const Constants = {
     Enums: {
       meal_type: ["dinner", "lunch", "breakfast", "snack"],
       recipe_type: ["dietary", "cuisine", "course", "holiday", "method"],
+      role_type: ["owner", "admin", "member"],
       visibility_type: ["public", "private", "unlisted"],
     },
   },

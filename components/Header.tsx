@@ -4,9 +4,16 @@ import MainNavigation from "./MainNavigation";
 import MobileNavigation from "./MobileNavigation";
 import Logo from "@/public/Logo";
 import UserMenuDropdown from "@/features/user/components/UserMenuDropdown";
-import { User } from "@supabase/supabase-js";
+import HouseholdDropdown from "@/features/household/components/HouseholdPopover";
+import { getUser } from "@/features/user/user.data";
+import { getHousehold } from "@/features/household/household.data";
+import CreateDropdown from "./CreateDropdown";
 
-export default function Header({ user }: { user: User }) {
+export default async function Header() {
+  const user = await getUser();
+
+  const household = await getHousehold();
+
   return (
     <header className="p-4 flex justify-between items-center">
       <div className="flex items-center">
@@ -27,7 +34,13 @@ export default function Header({ user }: { user: User }) {
         </div>
       )}
 
-      {user && <UserMenuDropdown user={user} />}
+      {user && (
+        <div className="flex items-center gap-2">
+          <CreateDropdown />
+          <HouseholdDropdown household={household} />
+          <UserMenuDropdown user={user} />
+        </div>
+      )}
     </header>
   );
 }

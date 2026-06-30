@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import { getUser } from "@/features/user/user.data";
 import { Toaster } from "@/components/ui/sonner";
+import { getHousehold } from "@/features/household/household.data";
 
 const publicSans = Public_Sans({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -28,8 +29,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getUser();
-
   return (
     <html
       lang="en"
@@ -43,7 +42,7 @@ export default async function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col">
-        <Header user={user} />
+        <Header />
         <Toaster />
         <main className="flex-1 flex flex-col w-full h-full">{children}</main>
       </body>
