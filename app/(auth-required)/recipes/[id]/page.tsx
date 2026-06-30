@@ -6,8 +6,9 @@ export default async function RecipePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const user = await requireUser();
   const { id } = await params;
+
+  await requireUser(`/recipes/${id}`);
 
   return (
     <>

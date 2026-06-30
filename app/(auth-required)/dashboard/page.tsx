@@ -1,7 +1,7 @@
 import { requireUser } from "@/features/auth/auth.data";
 
 export default async function DashboardPage() {
-  const user = await requireUser();
+  await requireUser("/dashboard");
 
   return (
     <div>

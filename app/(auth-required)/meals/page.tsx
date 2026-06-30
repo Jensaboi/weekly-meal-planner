@@ -1,7 +1,7 @@
 import { requireUser } from "@/features/auth/auth.data";
 
 export default async function MealsPage() {
-  const user = await requireUser();
+  await requireUser("/meals");
 
   return (
     <div>

@@ -12,7 +12,7 @@ import { requireUser } from "@/features/auth/auth.data";
 import Link from "next/link";
 
 export default async function CreateRecipePage() {
-  const user = await requireUser();
+  await requireUser();
   return (
     <section className="container mx-auto px-4 lg:px-8 py-16">
       <h1 className="text-3xl font-bold">Create recipe</h1>
