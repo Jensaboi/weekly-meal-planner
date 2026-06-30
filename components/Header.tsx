@@ -3,11 +3,11 @@ import { Button } from "./ui/button";
 import MainNavigation from "./MainNavigation";
 import MobileNavigation from "./MobileNavigation";
 import Logo from "@/public/Logo";
-import UserMenuDropdown from "@/features/user/components/UserMenuDropdown";
 import HouseholdDropdown from "@/features/household/components/HouseholdPopover";
 import { getUser } from "@/features/user/user.data";
 import { getHousehold } from "@/features/household/household.data";
 import CreateDropdown from "./CreateDropdown";
+import UserDropdown from "@/features/user/components/UserDropdown";
 
 export default async function Header() {
   const user = await getUser();
@@ -38,7 +38,7 @@ export default async function Header() {
         <div className="flex items-center gap-2">
           <CreateDropdown />
           <HouseholdDropdown household={household} />
-          <UserMenuDropdown user={user} />
+          <UserDropdown user={user} />
         </div>
       )}
     </header>
