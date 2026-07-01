@@ -78,6 +78,7 @@ export default function PlanMealModal({
           </DialogDescription>
         </DialogHeader>
         <Calendar
+          weekStartsOn={1}
           mode="single"
           selected={date}
           onSelect={setDate}

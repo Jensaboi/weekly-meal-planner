@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
-export async function requireUser(redirectTo?: string) {
+export async function requireUser(redirectTo?: string): Promise<string> {
   if (!redirectTo) redirectTo = "/";
 
   const supabase = await createClient();
@@ -13,4 +13,6 @@ export async function requireUser(redirectTo?: string) {
   if (error) redirect(`/sign-in?redirectTo=${redirectTo}`);
 
   if (!data?.claims) redirect(`/sign-in?redirectTo=${redirectTo}`);
+
+  return data?.claims?.sub;
 }
