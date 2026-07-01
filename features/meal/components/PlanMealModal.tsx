@@ -28,10 +28,8 @@ import { toast } from "sonner";
 
 export default function PlanMealModal({
   recipeId = null,
-  householdId = null,
 }: {
   recipeId: number | null;
-  householdId: number | null;
 }) {
   const { isOpen, setIsOpen } = useToggle();
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -114,12 +112,6 @@ export default function PlanMealModal({
                 name="recipeId"
                 id="recipeId"
                 value={recipeId ?? ""}
-              />
-              <Input
-                type="hidden"
-                name="householdId"
-                id="householdId"
-                value={householdId ?? ""}
               />
 
               <Input

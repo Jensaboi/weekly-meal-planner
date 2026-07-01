@@ -3,20 +3,24 @@ import { redirect } from "next/navigation";
 import { getUser } from "../user/user.data";
 import { NewMeal } from "./meal.schema";
 import { createClient } from "@/lib/supabase/server";
+import { getHousehold } from "../household/household.data";
 
 export async function planMealAction(formData: FormData) {
-  const household_id =
-    (formData.get("householdId") as string) === ""
-      ? null
-      : (formData.get("householdId") as string);
+  const household = await getHousehold();
 
   const user = await getUser();
 
   if (!user) redirect("/login");
 
+  let household_id = null;
   let user_id = null;
 
-  if (!household_id) user_id = user.id;
+  //later add question what to plan for(user, household)?
+  if (household) {
+    household_id = household.id;
+  } else {
+    user_id = user.id;
+  }
 
   const input = {
     recipe_id: formData.get("recipeId") as string,

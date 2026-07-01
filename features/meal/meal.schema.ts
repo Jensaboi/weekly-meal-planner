@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const NewMeal = z.object({
-  user_id: z.uuid(),
+  user_id: z.uuid().nullable(),
   household_id: z.number().nullable(),
   recipe_id: z.coerce.number("Recipe id is required"),
   date: z.string("Select a date for the meal."),
