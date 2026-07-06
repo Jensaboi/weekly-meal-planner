@@ -2,21 +2,26 @@
 
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
-import { CalendarIcon, List, RefreshCw } from "lucide-react";
+import { CalendarIcon, List } from "lucide-react";
 import { useState } from "react";
-import { MealCard } from "../meal.type";
+import { MealCardData } from "../meal.type";
 import MonthView from "./MonthView";
+import WeekView from "./WeekView";
 
-export default function MealsCalendar({ meals }: { meals: MealCard[] }) {
-  const [calendarType, setCalendarType] = useState<"list" | "week" | "month">(
-    "week",
+export default function MealsCalendar({ meals }: { meals: MealCardData[] }) {
+  const [calendarType, setCalendarType] = useState<"list" | "month">("month");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date(),
+  );
+
+  const selectedDateMeals = meals.filter(
+    meal =>
+      meal.date?.split("T")[0] === selectedDate?.toISOString().split("T")[0],
   );
 
   return (
     <section className="mx-auto container px-4">
-      <div className="flex justify-between items-center py-4">
-        <h1 className="text-2xl font-medium">Meals</h1>
-
+      <div className="flex justify-end items-center py-4">
         <div className="flex items-center">
           <Button
             onClick={() => setCalendarType("list")}
@@ -25,14 +30,6 @@ export default function MealsCalendar({ meals }: { meals: MealCard[] }) {
             className={clsx(calendarType === "list" && "bg-muted")}
           >
             <List />
-          </Button>
-          <Button
-            onClick={() => setCalendarType("week")}
-            title="Weekly"
-            variant={"ghost"}
-            className={clsx(calendarType === "week" && "bg-muted")}
-          >
-            <RefreshCw />
           </Button>
           <Button
             onClick={() => setCalendarType("month")}
@@ -45,11 +42,23 @@ export default function MealsCalendar({ meals }: { meals: MealCard[] }) {
         </div>
       </div>
 
-      {calendarType === "list" && <div></div>}
+      {calendarType === "list" && (
+        <WeekView
+          meals={meals}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          selectedDateMeals={selectedDateMeals}
+        />
+      )}
 
-      {calendarType === "week" && <div></div>}
-
-      {calendarType === "month" && <MonthView meals={meals} />}
+      {calendarType === "month" && (
+        <MonthView
+          setSelectedDate={setSelectedDate}
+          selectedDate={selectedDate}
+          meals={meals}
+          selectedDateMeals={selectedDateMeals}
+        />
+      )}
     </section>
   );
 }
