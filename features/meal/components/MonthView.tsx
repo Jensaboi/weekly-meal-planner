@@ -21,9 +21,7 @@ export default function MonthView({
   );
 
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <SelectedDay meals={selectedDateMeals} date={selectedDate} />
-
+    <div className="md:grid md:grid-cols-2 gap-16">
       <Calendar
         className="p-0 [--cell-size:--spacing(9.5)] w-full"
         weekStartsOn={1}
@@ -59,6 +57,7 @@ export default function MonthView({
         }}
         onMonthChange={setCurrentMonth}
       />
+      <SelectedDay meals={selectedDateMeals} date={selectedDate} />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { MealCardData } from "../meal.type";
 import MonthView from "./MonthView";
 import WeekView from "./WeekView";
+import { formatDate } from "@/lib/utils";
 
 export default function MealsCalendar({ meals }: { meals: MealCardData[] }) {
   const [calendarType, setCalendarType] = useState<"list" | "month">("month");
@@ -16,7 +17,8 @@ export default function MealsCalendar({ meals }: { meals: MealCardData[] }) {
 
   const selectedDateMeals = meals.filter(
     meal =>
-      meal.date?.split("T")[0] === selectedDate?.toISOString().split("T")[0],
+      formatDate(new Date(meal.date || "")) ===
+      formatDate(selectedDate || new Date()),
   );
 
   return (
@@ -24,7 +26,10 @@ export default function MealsCalendar({ meals }: { meals: MealCardData[] }) {
       <div className="flex justify-end items-center py-4">
         <div className="flex items-center">
           <Button
-            onClick={() => setCalendarType("list")}
+            onClick={() => {
+              setCalendarType("list");
+              setSelectedDate(new Date());
+            }}
             title="List"
             variant={"ghost"}
             className={clsx(calendarType === "list" && "bg-muted")}
@@ -32,7 +37,10 @@ export default function MealsCalendar({ meals }: { meals: MealCardData[] }) {
             <List />
           </Button>
           <Button
-            onClick={() => setCalendarType("month")}
+            onClick={() => {
+              setCalendarType("month");
+              setSelectedDate(new Date());
+            }}
             title="Monthly"
             variant={"ghost"}
             className={clsx(calendarType === "month" && "bg-muted")}
