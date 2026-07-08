@@ -4,6 +4,7 @@ import { MealCardData } from "../meal.type";
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import SelectedDay from "./SelectedDay";
 import { useState } from "react";
+import { formatDate } from "@/lib/utils";
 
 export default function MonthView({
   meals,
@@ -21,9 +22,7 @@ export default function MonthView({
   );
 
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <SelectedDay meals={selectedDateMeals} date={selectedDate} />
-
+    <div className="flex flex-col md:grid-cols-2 md:grid  gap-16">
       <Calendar
         className="p-0 [--cell-size:--spacing(9.5)] w-full"
         weekStartsOn={1}
@@ -34,10 +33,10 @@ export default function MonthView({
         components={{
           DayButton: ({ ...props }) => {
             const day = props.day.date.getDate();
-            const currDate = props.day.date.toISOString().split("T")[0];
+            const currDate = formatDate(props.day.date);
 
             const mealsOnDate = meals.filter(meal => {
-              const mealDate = meal.date?.split("T")[0];
+              const mealDate = formatDate(new Date(meal.date || ""));
 
               if (mealDate === currDate) return true;
             });
@@ -59,6 +58,7 @@ export default function MonthView({
         }}
         onMonthChange={setCurrentMonth}
       />
+      <SelectedDay meals={selectedDateMeals} date={selectedDate} />
     </div>
   );
 }

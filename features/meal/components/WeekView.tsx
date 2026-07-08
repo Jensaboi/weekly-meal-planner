@@ -1,5 +1,8 @@
-import { ChevronLeft } from "lucide-react";
 import { MealCardData } from "../meal.type";
+import { formatDate } from "@/lib/utils";
+import SelectedDay from "./SelectedDay";
+import { Button } from "@/components/ui/button";
+import clsx from "clsx";
 
 export default function WeekView({
   meals,
@@ -15,42 +18,56 @@ export default function WeekView({
   const today = new Date();
 
   const monday = new Date(
-    today.getDay() === 1 ? today : today.getDay() - 7 + 1,
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() - today.getDay() + 1,
   );
 
   return (
-    <div>
+    <div className="max-w-5xl mx-auto grid grid-cols-1 gap-16">
       <table className="w-full border-collapse">
         <thead>
-          <tr>
+          <tr className="grid grid-cols-7">
             {Array.from({ length: 7 }).map((_, index) => {
               const day = new Date(monday);
               day.setDate(monday.getDate() + index);
 
               const isSelected =
                 selectedDate &&
-                day.toISOString().split("T")[0] ===
-                  selectedDate.toISOString().split("T")[0];
+                formatDate(day ?? new Date()) === formatDate(selectedDate);
+
+              const isToday = formatDate(day) === formatDate(new Date());
 
               const mealsOnDate = meals.filter(meal => {
-                const mealDate = meal.date?.split("T")[0];
-                const currDate = day.toISOString().split("T")[0];
+                const mealDate = formatDate(new Date(meal.date || ""));
+                const currDate = formatDate(day);
 
                 if (mealDate === currDate) return true;
               });
 
               return (
-                <th key={index} className="border p-2">
-                  <button
+                <th className="aspect-square" key={index}>
+                  <Button
+                    variant={isSelected ? "default" : "ghost"}
                     onClick={() => setSelectedDate(day)}
-                    className={`w-full h-full p-2 rounded ${
-                      isSelected ? "bg-zinc-800 text-white" : ""
-                    }`}
+                    className={clsx(
+                      `w-full h-full flex flex-col justify-center items-center`,
+                      isToday && "bg-muted",
+                      isSelected && "bg-primary text-primary-foreground",
+                    )}
                   >
-                    {day.toLocaleDateString("en-US", {
-                      weekday: "short",
-                      day: "numeric",
-                    })}
+                    <div className="flex flex-col items-center">
+                      <span className="text-xs text-muted-foreground">
+                        {day.toLocaleDateString("en-US", {
+                          weekday: "short",
+                        })}
+                      </span>
+                      <span>
+                        {day.toLocaleDateString("en-US", {
+                          day: "numeric",
+                        })}
+                      </span>
+                    </div>
                     <div className="flex items-center gap-2 justify-center mt-1">
                       {mealsOnDate.map(meal => (
                         <div
@@ -59,13 +76,14 @@ export default function WeekView({
                         ></div>
                       ))}
                     </div>
-                  </button>
+                  </Button>
                 </th>
               );
             })}
           </tr>
         </thead>
       </table>
+      <SelectedDay meals={selectedDateMeals} date={selectedDate} />
     </div>
   );
 }
