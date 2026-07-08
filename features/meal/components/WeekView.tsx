@@ -42,11 +42,9 @@ export default function WeekView({
                 const mealDate = formatDate(new Date(meal.date || ""));
                 const currDate = formatDate(day);
 
-                console.log(mealDate, currDate, mealDate === currDate);
-
                 if (mealDate === currDate) return true;
               });
-              console.log(day);
+
               return (
                 <th className="aspect-square" key={index}>
                   <Button

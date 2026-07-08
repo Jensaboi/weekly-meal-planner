@@ -21,6 +21,10 @@ export default function MealsCalendar({ meals }: { meals: MealCardData[] }) {
       formatDate(selectedDate || new Date()),
   );
 
+  console.log("selectedDateMeals", selectedDateMeals);
+  console.log("selectedDate", selectedDate);
+  console.log("meals", meals);
+
   return (
     <section className="mx-auto container px-4">
       <div className="flex justify-end items-center py-4">

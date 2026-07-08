@@ -10,6 +10,9 @@ import {
 import type { MealCardData } from "../meal.type.ts";
 import MealItem from "./MealItem";
 import { capitalizeFirstLetter } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import Link from "next/link.js";
 
 export default function SelectedDay({
   date,
@@ -32,16 +35,27 @@ export default function SelectedDay({
 
   return (
     <Card>
-      <CardContent>
+      <CardContent className="w-full h-full">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold mb-4">
+          <CardTitle className="text-lg text-center font-semibold mb-4">
             {capitalizeFirstLetter(
               date?.toLocaleDateString("sv-SE", options) ?? "No date selected",
             )}
           </CardTitle>
         </CardHeader>
         {meals.length === 0 ? (
-          <CardDescription>No meals planned for this day.</CardDescription>
+          <div className="h-full flex flex-col gap-4">
+            <CardDescription className="text-center">
+              No meals planned for this day.
+            </CardDescription>
+            <div className="flex-1 flex justify-center items-center">
+              <Button title="Add Meal" variant={"outline"} asChild>
+                <Link href="/recipes">
+                  <Plus className="size-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
         ) : (
           <div>
             <ul className="flex flex-col gap-4">
