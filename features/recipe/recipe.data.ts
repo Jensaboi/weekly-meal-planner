@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import {
+  IngredientData,
   RecipeCardData,
   RecipeDetailsData,
   RecipeReviewData,
