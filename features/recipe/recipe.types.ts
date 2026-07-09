@@ -6,7 +6,7 @@ export type RecipeCategory =
   Database["public"]["Tables"]["recipe_categories"]["Row"];
 
 export type RecipeDetailsData =
-  Database["public"]["Views"]["recipe_detail"]["Row"];
+  Database["public"]["Views"]["recipe_details"]["Row"];
 
 export type InstructionData =
   Database["public"]["Tables"]["recipe_instructions"]["Row"];
