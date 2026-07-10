@@ -2,7 +2,10 @@ import z from "zod";
 
 export const NewReview = z.object({
   author_id: z.uuid("You must be authenticated to leave a review."),
-  comment: z.string().optional(),
+  comment: z.preprocess(
+    val => (val === "" ? null : val),
+    z.string().nullable(),
+  ),
   rating: z.coerce.number("You must leave a review rating."),
   recipe_id: z.coerce.number("Invalid recipe id."),
 });

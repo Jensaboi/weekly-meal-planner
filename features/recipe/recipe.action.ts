@@ -14,7 +14,7 @@ export async function sendReviewAction(formData: FormData) {
   const input = {
     author_id: user.id,
     rating: Number(formData.get("rating") as string),
-    comment: formData.get("comment") as string | null,
+    comment: (formData.get("comment") as string).trim(),
     recipe_id: Number(formData.get("recipeId") as string),
   };
 
