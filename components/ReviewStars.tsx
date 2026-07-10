@@ -1,17 +1,17 @@
 import { Star } from "lucide-react";
 
 export default function ReviewStars({
-  avgRating,
-  size,
+  rating,
+  starSize,
 }: {
-  avgRating: number | null | undefined;
-  size?: number | undefined;
+  rating?: number | null | undefined;
+  starSize?: number;
 }) {
-  if (!avgRating) avgRating = 0;
+  if (!rating) rating = 0;
 
-  const filledStars = Array.from({ length: Math.floor(avgRating) }, (_, i) => (
+  const filledStars = Array.from({ length: Math.floor(rating) }, (_, i) => (
     <Star
-      size={size}
+      size={starSize}
       key={`filled-${i}`}
       className="fill-yellow-300"
       strokeWidth={1}
@@ -19,24 +19,24 @@ export default function ReviewStars({
   ));
 
   const transparentStars = Array.from(
-    { length: 5 - Math.floor(avgRating) },
-    (_, i) => <Star size={size} key={`empty-${i}`} strokeWidth={1} />,
+    { length: 5 - Math.floor(rating) },
+    (_, i) => <Star size={starSize} key={`empty-${i}`} strokeWidth={1} />,
   );
 
-  const percent = Number(avgRating.toFixed(2).split(".").pop());
+  const percent = Number(rating.toFixed(2).split(".").pop());
 
   const isHalfStar = percent && percent !== 0 ? true : false;
 
   if (isHalfStar) {
     transparentStars[0] = (
       <div key="partial-star" className="relative">
-        <Star size={size} className="fill-transparent" strokeWidth={1} />
+        <Star size={starSize} className="fill-transparent" strokeWidth={1} />
 
         <div
           className="absolute inset-0 overflow-hidden"
           style={{ width: `${percent}%` }}
         >
-          <Star size={size} className="fill-yellow-300" strokeWidth={1} />
+          <Star size={starSize} className="fill-yellow-300" strokeWidth={1} />
         </div>
       </div>
     );

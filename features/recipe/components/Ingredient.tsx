@@ -1,17 +1,17 @@
 import { Item, ItemDescription } from "@/components/ui/item";
-import { IngredientData } from "../recipe.types";
+import { IngredientType } from "../recipe.types";
 
 export default function Ingredient({
   ingredient,
 }: {
-  ingredient: IngredientData;
+  ingredient: IngredientType;
 }) {
   return (
     <Item asChild variant={"outline"}>
       <li>
         <ItemDescription>
           <strong>
-            {ingredient.quantity} {ingredient.unit}
+            {ingredient.amount} {ingredient.unit}
           </strong>{" "}
           {ingredient.name}
         </ItemDescription>

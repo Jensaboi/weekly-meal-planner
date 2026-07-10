@@ -7,14 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { RecipeCardData, RecipeCategory } from "../recipe.types";
+import { RecipeCardType, RecipeCategoryType } from "../recipe.types";
 import { Badge } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/client";
-import Image from "next/image";
 import { Clock, CookingPot, MessageSquare, Star, Utensils } from "lucide-react";
+import Image from "next/image";
 
-export default function RecipeCard({ recipe }: { recipe: RecipeCardData }) {
-  const categories = recipe.categories as RecipeCategory[];
+export default function RecipeCard({ recipe }: { recipe: RecipeCardType }) {
+  const categories = recipe.categories as RecipeCategoryType[];
 
   const supabase = createClient();
 

@@ -5,10 +5,10 @@ import {
   ItemFooter,
   ItemHeader,
 } from "@/components/ui/item";
-import { RecipeReviewData } from "../recipe.types";
+import { RecipeReviewType } from "../recipe.types";
 import ReviewStars from "@/components/ReviewStars";
 
-export default function Review({ review }: { review: RecipeReviewData }) {
+export default function Review({ review }: { review: RecipeReviewType }) {
   return (
     <Item variant={"outline"}>
       <ItemHeader>
@@ -22,7 +22,7 @@ export default function Review({ review }: { review: RecipeReviewData }) {
         </ItemDescription>
       </ItemContent>
       <ItemFooter>
-        <ReviewStars size={16} avgRating={review.rating} />
+        <ReviewStars starSize={16} rating={review.rating} />
       </ItemFooter>
     </Item>
   );

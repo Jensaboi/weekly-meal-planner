@@ -16,35 +16,41 @@ export type Database = {
     Tables: {
       groceries: {
         Row: {
+          added_by: Database["public"]["Enums"]["added_by_type"]
+          amount: number
           created_at: string
           household_id: number | null
           id: number
-          is_checked: boolean
-          name: string
-          quantity: number
-          unit: string
+          ingredient_id: number
+          is_bought: boolean
+          meal_id: number | null
+          unit: Database["public"]["Enums"]["ingredient_unit"]
           updated_at: string
           user_id: string | null
         }
         Insert: {
+          added_by?: Database["public"]["Enums"]["added_by_type"]
+          amount: number
           created_at?: string
           household_id?: number | null
           id?: never
-          is_checked?: boolean
-          name: string
-          quantity: number
-          unit: string
+          ingredient_id: number
+          is_bought?: boolean
+          meal_id?: number | null
+          unit: Database["public"]["Enums"]["ingredient_unit"]
           updated_at?: string
           user_id?: string | null
         }
         Update: {
+          added_by?: Database["public"]["Enums"]["added_by_type"]
+          amount?: number
           created_at?: string
           household_id?: number | null
           id?: never
-          is_checked?: boolean
-          name?: string
-          quantity?: number
-          unit?: string
+          ingredient_id?: number
+          is_bought?: boolean
+          meal_id?: number | null
+          unit?: Database["public"]["Enums"]["ingredient_unit"]
           updated_at?: string
           user_id?: string | null
         }
@@ -63,36 +69,30 @@ export type Database = {
             referencedRelation: "households"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "groceries_ingredient_id_fkey"
+            columns: ["ingredient_id"]
+            isOneToOne: false
+            referencedRelation: "ingredients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "groceries_meal_id_fkey"
+            columns: ["meal_id"]
+            isOneToOne: false
+            referencedRelation: "meal_card"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "groceries_meal_id_fkey"
+            columns: ["meal_id"]
+            isOneToOne: false
+            referencedRelation: "meals"
+            referencedColumns: ["id"]
+          },
         ]
       }
-      households: {
-        Row: {
-          created_at: string
-          creator_id: string
-          id: number
-          invite_code: string
-          name: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          creator_id: string
-          id?: never
-          invite_code?: string
-          name: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          creator_id?: string
-          id?: never
-          invite_code?: string
-          name?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      households_members: {
+      household_members: {
         Row: {
           household_id: number
           id: number
@@ -128,72 +128,50 @@ export type Database = {
           },
         ]
       }
-      ingredients: {
+      households: {
         Row: {
+          created_at: string
+          creator_id: string
           id: number
-          livsmedel_id: number
+          invite_code: string
           name: string
+          updated_at: string
         }
         Insert: {
+          created_at?: string
+          creator_id: string
           id?: never
-          livsmedel_id: number
+          invite_code?: string
           name: string
+          updated_at?: string
         }
         Update: {
+          created_at?: string
+          creator_id?: string
           id?: never
-          livsmedel_id?: number
+          invite_code?: string
           name?: string
+          updated_at?: string
         }
         Relationships: []
       }
-      meal_ingredients: {
+      ingredients: {
         Row: {
-          amount: number
           id: number
-          ingredient_id: number
-          is_bought: boolean
-          meal_id: number
-          unit: Database["public"]["Enums"]["ingredient_unit"]
+          livsmedel_id: number | null
+          name: string
         }
         Insert: {
-          amount: number
           id?: never
-          ingredient_id: number
-          is_bought?: boolean
-          meal_id: number
-          unit: Database["public"]["Enums"]["ingredient_unit"]
+          livsmedel_id?: number | null
+          name: string
         }
         Update: {
-          amount?: number
           id?: never
-          ingredient_id?: number
-          is_bought?: boolean
-          meal_id?: number
-          unit?: Database["public"]["Enums"]["ingredient_unit"]
+          livsmedel_id?: number | null
+          name?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "meal_ingredients_ingredient_id_fkey"
-            columns: ["ingredient_id"]
-            isOneToOne: false
-            referencedRelation: "ingredients"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "meal_ingredients_meal_id_fkey"
-            columns: ["meal_id"]
-            isOneToOne: false
-            referencedRelation: "meal_card"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "meal_ingredients_meal_id_fkey"
-            columns: ["meal_id"]
-            isOneToOne: false
-            referencedRelation: "meals"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       meals: {
         Row: {
@@ -202,7 +180,7 @@ export type Database = {
           household_id: number | null
           id: number
           meal_type: Database["public"]["Enums"]["meal_type"]
-          portion: number
+          portions: number
           recipe_id: number
           updated_at: string
           user_id: string | null
@@ -213,7 +191,7 @@ export type Database = {
           household_id?: number | null
           id?: never
           meal_type: Database["public"]["Enums"]["meal_type"]
-          portion?: number
+          portions?: number
           recipe_id: number
           updated_at?: string
           user_id?: string | null
@@ -224,7 +202,7 @@ export type Database = {
           household_id?: number | null
           id?: never
           meal_type?: Database["public"]["Enums"]["meal_type"]
-          portion?: number
+          portions?: number
           recipe_id?: number
           updated_at?: string
           user_id?: string | null
@@ -291,14 +269,17 @@ export type Database = {
       recipe_categories_map: {
         Row: {
           category_id: number
+          id: number
           recipe_id: number
         }
         Insert: {
           category_id: number
+          id?: never
           recipe_id: number
         }
         Update: {
           category_id?: number
+          id?: never
           recipe_id?: number
         }
         Relationships: [
@@ -378,23 +359,23 @@ export type Database = {
       recipe_images: {
         Row: {
           created_at: string
-          id: number
-          img_path: string
-          is_default: boolean | null
+          id: string
+          is_default: boolean
+          path: string
           recipe_id: number
         }
         Insert: {
           created_at?: string
-          id?: never
-          img_path: string
-          is_default?: boolean | null
+          id: string
+          is_default?: boolean
+          path: string
           recipe_id: number
         }
         Update: {
           created_at?: string
-          id?: never
-          img_path?: string
-          is_default?: boolean | null
+          id?: string
+          is_default?: boolean
+          path?: string
           recipe_id?: number
         }
         Relationships: [
@@ -520,7 +501,7 @@ export type Database = {
       recipe_reviews: {
         Row: {
           author_id: string
-          comment: string
+          comment: string | null
           created_at: string
           id: number
           rating: number
@@ -529,7 +510,7 @@ export type Database = {
         }
         Insert: {
           author_id: string
-          comment: string
+          comment?: string | null
           created_at?: string
           id?: never
           rating: number
@@ -538,7 +519,7 @@ export type Database = {
         }
         Update: {
           author_id?: string
-          comment?: string
+          comment?: string | null
           created_at?: string
           id?: never
           rating?: number
@@ -640,6 +621,8 @@ export type Database = {
           portions: number | null
           prep_time: number | null
           recipe_id: number | null
+          total_ingredients: number | null
+          total_instructions: number | null
           total_reviews: number | null
           updated_at: string | null
           user_id: string | null
@@ -696,6 +679,8 @@ export type Database = {
           name: string | null
           portions: number | null
           prep_time: number | null
+          total_ingredients: number | null
+          total_instructions: number | null
           total_reviews: number | null
           updated_at: string | null
           visibility: Database["public"]["Enums"]["visibility_type"] | null
@@ -712,6 +697,8 @@ export type Database = {
           name?: string | null
           portions?: number | null
           prep_time?: number | null
+          total_ingredients?: never
+          total_instructions?: never
           total_reviews?: never
           updated_at?: string | null
           visibility?: Database["public"]["Enums"]["visibility_type"] | null
@@ -728,6 +715,8 @@ export type Database = {
           name?: string | null
           portions?: number | null
           prep_time?: number | null
+          total_ingredients?: never
+          total_instructions?: never
           total_reviews?: never
           updated_at?: string | null
           visibility?: Database["public"]["Enums"]["visibility_type"] | null
@@ -749,6 +738,7 @@ export type Database = {
           name: string | null
           portions: number | null
           prep_time: number | null
+          total_review_comments: number | null
           total_reviews: number | null
           updated_at: string | null
           visibility: Database["public"]["Enums"]["visibility_type"] | null
@@ -767,6 +757,7 @@ export type Database = {
           name?: string | null
           portions?: number | null
           prep_time?: number | null
+          total_review_comments?: never
           total_reviews?: never
           updated_at?: string | null
           visibility?: Database["public"]["Enums"]["visibility_type"] | null
@@ -785,6 +776,7 @@ export type Database = {
           name?: string | null
           portions?: number | null
           prep_time?: number | null
+          total_review_comments?: never
           total_reviews?: never
           updated_at?: string | null
           visibility?: Database["public"]["Enums"]["visibility_type"] | null
@@ -800,6 +792,7 @@ export type Database = {
       leave_household: { Args: never; Returns: undefined }
     }
     Enums: {
+      added_by_type: "meal" | "manual"
       ingredient_unit:
         | "g"
         | "kg"
@@ -811,7 +804,13 @@ export type Database = {
         | "tsp"
         | "pcs"
       meal_type: "dinner" | "lunch" | "breakfast" | "snack"
-      recipe_type: "dietary" | "cuisine" | "course" | "holiday" | "method"
+      recipe_type:
+        | "dietary"
+        | "cuisine"
+        | "course"
+        | "holiday"
+        | "method"
+        | "tag"
       role_type: "owner" | "admin" | "member"
       visibility_type: "public" | "private" | "unlisted"
     }
@@ -941,9 +940,10 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      added_by_type: ["meal", "manual"],
       ingredient_unit: ["g", "kg", "ml", "cl", "dl", "l", "tbsp", "tsp", "pcs"],
       meal_type: ["dinner", "lunch", "breakfast", "snack"],
-      recipe_type: ["dietary", "cuisine", "course", "holiday", "method"],
+      recipe_type: ["dietary", "cuisine", "course", "holiday", "method", "tag"],
       role_type: ["owner", "admin", "member"],
       visibility_type: ["public", "private", "unlisted"],
     },
