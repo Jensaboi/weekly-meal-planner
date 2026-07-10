@@ -1,21 +1,24 @@
 import { Database } from "@/lib/supabase/database.types";
 
-export type RecipeCardData = Database["public"]["Views"]["recipe_card"]["Row"];
+export type RecipeCardType = Database["public"]["Views"]["recipe_card"]["Row"];
 
-export type RecipeCategory =
+export type RecipeCategoryType =
   Database["public"]["Tables"]["recipe_categories"]["Row"];
 
-export type RecipeDetailsData =
+export type RecipeDetailsType =
   Database["public"]["Views"]["recipe_details"]["Row"];
 
-export type InstructionData =
+export type InstructionType =
   Database["public"]["Tables"]["recipe_instructions"]["Row"];
 
-export type IngredientData =
-  Database["public"]["Tables"]["recipe_ingredients"]["Row"];
+export type IngredientType =
+  Database["public"]["Tables"]["recipe_ingredients"]["Row"] & {
+    name: string;
+    livsmedel_id: number;
+  };
 
-export type RecipeImageData =
+export type RecipeImageType =
   Database["public"]["Tables"]["recipe_images"]["Row"];
 
-export type RecipeReviewData =
+export type RecipeReviewType =
   Database["public"]["Tables"]["recipe_reviews"]["Row"];

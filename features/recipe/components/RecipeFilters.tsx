@@ -5,12 +5,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+type Filter = {
+  trigger: string;
+  content: React.ReactNode;
+  align: "start" | "end" | "center";
+};
+
 export default function RecipeFilters() {
-  const filters: {
-    trigger: string;
-    content: React.ReactNode;
-    align: "start" | "end" | "center";
-  }[] = [
+  const filters: Filter[] = [
     { trigger: "Course", content: "", align: "start" },
     { trigger: "Cuisine", content: "", align: "start" },
     { trigger: "Dietary", content: "", align: "start" },

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { InstructionData } from "../recipe.types";
+import { InstructionType } from "../recipe.types";
 import { Item, ItemDescription } from "@/components/ui/item";
 import { Check } from "lucide-react";
 import clsx from "clsx";
@@ -9,7 +9,7 @@ import clsx from "clsx";
 export default function Instruction({
   instruction,
 }: {
-  instruction: InstructionData;
+  instruction: InstructionType;
 }) {
   const [isChecked, setIsChecked] = useState(false);
   return (

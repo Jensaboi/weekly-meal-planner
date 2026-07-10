@@ -1,12 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import {
-  IngredientData,
-  RecipeCardData,
-  RecipeDetailsData,
-  RecipeReviewData,
+  RecipeCardType,
+  RecipeDetailsType,
+  RecipeReviewType,
 } from "./recipe.types";
+import { requireUser } from "../auth/auth.data";
 
-export async function getRecipes(): Promise<RecipeCardData[]> {
+export async function getRecipes(): Promise<RecipeCardType[]> {
   const supabase = await createClient();
 
   const { error, data } = await supabase.from("recipe_card").select();
@@ -18,7 +18,7 @@ export async function getRecipes(): Promise<RecipeCardData[]> {
 
 export async function getRecipeDetails(
   id: number,
-): Promise<RecipeDetailsData | null> {
+): Promise<RecipeDetailsType | null> {
   if (!id) throw new Error("Recipe id is required.");
 
   const supabase = await createClient();
@@ -34,9 +34,9 @@ export async function getRecipeDetails(
   return data;
 }
 
-export async function getRecipeReviews(
+export async function getRecipeReviewComments(
   id: number,
-): Promise<RecipeReviewData[]> {
+): Promise<RecipeReviewType[]> {
   if (!id) throw new Error("Recipe id is required");
 
   const supabase = await createClient();
@@ -44,7 +44,8 @@ export async function getRecipeReviews(
   const { data, error } = await supabase
     .from("recipe_reviews")
     .select("*")
-    .eq("recipe_id", id);
+    .eq("recipe_id", id)
+    .neq("comment", null);
 
   if (error) throw error;
 
@@ -59,4 +60,21 @@ export async function getRecipeImageUrl(path: string) {
   } = supabase.storage.from("recipe_images").getPublicUrl(path);
 
   return publicUrl;
+}
+
+export async function getMyReview(recipeId: number) {
+  const userId = await requireUser();
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("recipe_reviews")
+    .select("*")
+    .eq("recipe_id", recipeId)
+    .eq("author_id", userId)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  return data;
 }
