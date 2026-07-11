@@ -111,7 +111,10 @@ export default async function RecipeDetails({ id }: { id: number }) {
             </p>
 
             <div className="flex items-center gap-4 my-4">
-              <PlanMealModal recipeId={id} />
+              <PlanMealModal
+                recipePortions={recipe.portions ?? 1}
+                recipeId={id}
+              />
 
               <Button variant={"secondary"} size={"lg"}>
                 <Heart />

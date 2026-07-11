@@ -3,29 +3,15 @@ import { redirect } from "next/navigation";
 import { getUser } from "../user/user.data";
 import { NewMeal } from "./meal.schema";
 import { createClient } from "@/lib/supabase/server";
-import { getHousehold } from "../household/household.data";
 
 export async function planMealAction(formData: FormData) {
-  const household = await getHousehold();
-
   const user = await getUser();
 
   if (!user) redirect("/login");
 
-  let household_id = null;
-  let user_id = null;
-
-  //later add question what to plan for(user, household)?
-  if (household) {
-    household_id = household.id;
-  } else {
-    user_id = user.id;
-  }
-
   const input = {
+    portions: formData.get("portions") as string,
     recipe_id: formData.get("recipeId") as string,
-    user_id,
-    household_id,
     meal_type: formData.get("mealType") as string,
     date: formData.get("date") as string,
   };
@@ -38,10 +24,24 @@ export async function planMealAction(formData: FormData) {
 
   const supabase = await createClient();
 
-  const { error } = await supabase.from("meals").insert(meal.data);
+  const { error } = await supabase.rpc("create_meal_and_groceries", {
+    p_date: meal.data.date,
+    p_meal_type: meal.data.meal_type,
+    p_portions: meal.data.portions,
+    p_recipe_id: meal.data.recipe_id,
+  });
 
   if (error) {
-    return { success: false, error: error.message };
+    if (error.code === "23505")
+      return {
+        success: false,
+        error: `You have already planned ${meal.data.meal_type} on this date.`,
+      };
+
+    return {
+      success: false,
+      error: error.message,
+    };
   }
 
   return { success: true, error: null };

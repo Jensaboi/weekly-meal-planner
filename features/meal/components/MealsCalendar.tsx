@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 import { CalendarIcon, List } from "lucide-react";
 import { useState } from "react";
-import { MealCardData } from "../meal.type";
+import { MealCardType } from "../meal.type";
 import MonthView from "./MonthView";
 import WeekView from "./WeekView";
 import { formatDate } from "@/lib/utils";
 
-export default function MealsCalendar({ meals }: { meals: MealCardData[] }) {
+export default function MealsCalendar({ meals }: { meals: MealCardType[] }) {
   const [calendarType, setCalendarType] = useState<"list" | "month">("month");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date(),

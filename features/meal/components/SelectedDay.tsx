@@ -7,7 +7,7 @@ import {
   CardAction,
   CardDescription,
 } from "@/components/ui/card";
-import type { MealCardData } from "../meal.type.ts";
+import type { MealCardType } from "../meal.type.ts";
 import MealItem from "./MealItem";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ export default function SelectedDay({
   meals,
 }: {
   date: Date | undefined;
-  meals: MealCardData[];
+  meals: MealCardType[];
 }) {
   const options = {
     weekday: "long",

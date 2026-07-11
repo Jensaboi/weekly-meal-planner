@@ -28,9 +28,12 @@ import { toast } from "sonner";
 
 export default function PlanMealModal({
   recipeId = null,
+  recipePortions,
 }: {
   recipeId: number | null;
+  recipePortions: number;
 }) {
+  const currentHour = new Date().getHours();
   const { isOpen, setIsOpen } = useToggle();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [currentMonth, setCurrentMonth] = useState<Date>(
@@ -121,18 +124,56 @@ export default function PlanMealModal({
                 id="date"
                 value={date?.toISOString() ?? ""}
               />
+              <div className="flex items-center gap-8">
+                <label
+                  htmlFor="mealType"
+                  className="flex flex-col font-medium gap-2"
+                >
+                  Select meal:
+                  <Select
+                    defaultValue={
+                      currentHour < 8
+                        ? "breakfast"
+                        : currentHour < 12
+                          ? "lunch"
+                          : currentHour < 18
+                            ? "dinner"
+                            : "snack"
+                    }
+                    name="mealType"
+                  >
+                    <SelectTrigger className="mb-4 w-full">
+                      <SelectValue placeholder="Select a course" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="breakfast">Breakfast</SelectItem>
+                      <SelectItem value="lunch">Lunch</SelectItem>
+                      <SelectItem value="dinner">Dinner</SelectItem>
+                      <SelectItem value="snack">Snack</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </label>
 
-              <Select name="mealType">
-                <SelectTrigger className="mb-4">
-                  <SelectValue placeholder="Select a course" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="breakfast">Breakfast</SelectItem>
-                  <SelectItem value="lunch">Lunch</SelectItem>
-                  <SelectItem value="dinner">Dinner</SelectItem>
-                  <SelectItem value="snack">Snack</SelectItem>
-                </SelectContent>
-              </Select>
+                <label
+                  htmlFor="portion"
+                  className="flex flex-col font-medium gap-2"
+                >
+                  Select portions:
+                  <Select defaultValue={recipePortions + ""} name="portions">
+                    <SelectTrigger className="mb-4 w-full">
+                      <SelectValue placeholder="Select portion size" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1</SelectItem>
+                      <SelectItem value="2">2</SelectItem>
+                      <SelectItem value="3">3</SelectItem>
+                      <SelectItem value="4">4</SelectItem>
+                      <SelectItem value="5">5</SelectItem>
+                      <SelectItem value="6">6</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </label>
+              </div>
 
               <Button
                 type="submit"
