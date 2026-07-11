@@ -8,10 +8,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { RecipeCardType, RecipeCategoryType } from "../recipe.types";
-import { Badge } from "@/components/ui/badge";
+
 import { createClient } from "@/lib/supabase/client";
-import { Clock, CookingPot, MessageSquare, Star, Utensils } from "lucide-react";
+import { Clock, CookingPot, MessageSquare, Utensils } from "lucide-react";
 import Image from "next/image";
+import ReviewStars from "@/components/ReviewStars";
+import { Badge } from "@/components/ui/badge";
 
 export default function RecipeCard({ recipe }: { recipe: RecipeCardType }) {
   const categories = recipe.categories as RecipeCategoryType[];
@@ -24,7 +26,7 @@ export default function RecipeCard({ recipe }: { recipe: RecipeCardType }) {
 
   return (
     <Card className="w-full h-full">
-      <CardHeader className="">
+      <CardHeader className="flex flex-col gap-4">
         <div className="relative w-full h-80">
           <Image
             objectFit="cover"
@@ -35,25 +37,21 @@ export default function RecipeCard({ recipe }: { recipe: RecipeCardType }) {
           />
         </div>
 
-        <CardTitle>{recipe.name}</CardTitle>
-        <div className="flex justify-start items-center gap-4">
-          <div className="flex items-center gap-1">
-            <Star fill="yellow" strokeWidth={1} size={14} />
-            <span className="text-xs">{recipe.avg_rating} / 5</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <MessageSquare size={14} />
-            <span className="text-xs">{recipe.total_reviews} reviews</span>
+        <div className="flex flex-col gap-1">
+          <CardTitle>{recipe.name}</CardTitle>
+
+          <div className="flex justify-start items-center gap-4">
+            <div className="flex items-center gap-2">
+              <ReviewStars starSize={14} rating={recipe.avg_rating} />
+              <span className="text-xs">{recipe.total_reviews}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <MessageSquare size={14} />
+              <span className="text-xs">{recipe.total_review_comments}</span>
+            </div>
           </div>
         </div>
-      </CardHeader>
 
-      <CardContent className="flex flex-col gap-4">
-        <CardAction className="w-full">
-          {categories.map(category => (
-            <Badge key={category.id}>{category.name}</Badge>
-          ))}
-        </CardAction>
         <div className="flex justify-start items-center gap-4">
           <div className="flex items-center gap-1" title="Portions amount">
             <Utensils size={14} />
@@ -71,8 +69,21 @@ export default function RecipeCard({ recipe }: { recipe: RecipeCardType }) {
           </div>
         </div>
 
-        <CardDescription>{recipe.description}</CardDescription>
+        <CardAction className="w-full flex gap-1 flex-wrap">
+          {categories.map(category => (
+            <Badge variant={"secondary"} key={category.id}>
+              {category.name}
+            </Badge>
+          ))}
+        </CardAction>
+      </CardHeader>
+
+      <CardContent className="flex flex-col gap-4">
+        <CardDescription className="line-clamp-3">
+          {recipe.description}
+        </CardDescription>
       </CardContent>
+
       <CardFooter></CardFooter>
     </Card>
   );

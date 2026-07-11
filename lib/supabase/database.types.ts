@@ -681,6 +681,7 @@ export type Database = {
           prep_time: number | null
           total_ingredients: number | null
           total_instructions: number | null
+          total_review_comments: number | null
           total_reviews: number | null
           updated_at: string | null
           visibility: Database["public"]["Enums"]["visibility_type"] | null
@@ -699,6 +700,7 @@ export type Database = {
           prep_time?: number | null
           total_ingredients?: never
           total_instructions?: never
+          total_review_comments?: never
           total_reviews?: never
           updated_at?: string | null
           visibility?: Database["public"]["Enums"]["visibility_type"] | null
@@ -717,6 +719,7 @@ export type Database = {
           prep_time?: number | null
           total_ingredients?: never
           total_instructions?: never
+          total_review_comments?: never
           total_reviews?: never
           updated_at?: string | null
           visibility?: Database["public"]["Enums"]["visibility_type"] | null
