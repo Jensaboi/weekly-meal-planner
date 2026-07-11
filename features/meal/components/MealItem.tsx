@@ -7,13 +7,13 @@ import {
   ItemHeader,
   ItemTitle,
 } from "@/components/ui/item";
-import { MealCardData } from "../meal.type";
+import { MealCardType } from "../meal.type";
 import { Clock, FileCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import Link from "next/link";
 
-export default function MealItem({ meal }: { meal: MealCardData }) {
+export default function MealItem({ meal }: { meal: MealCardType }) {
   return (
     <Item>
       <ItemContent>

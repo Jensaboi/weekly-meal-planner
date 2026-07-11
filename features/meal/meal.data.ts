@@ -2,9 +2,9 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { requireUser } from "../auth/auth.data";
-import { MealCardData } from "./meal.type";
+import { MealCardType } from "./meal.type";
 
-export async function getMeals(): Promise<MealCardData[]> {
+export async function getMeals(): Promise<MealCardType[]> {
   const userId = await requireUser();
 
   const supabase = await createClient();

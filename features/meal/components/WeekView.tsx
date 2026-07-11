@@ -1,4 +1,4 @@
-import { MealCardData } from "../meal.type";
+import { MealCardType } from "../meal.type";
 import { formatDate } from "@/lib/utils";
 import SelectedDay from "./SelectedDay";
 import { Button } from "@/components/ui/button";
@@ -10,10 +10,10 @@ export default function WeekView({
   setSelectedDate,
   selectedDateMeals,
 }: {
-  meals: MealCardData[];
+  meals: MealCardType[];
   selectedDate: Date | undefined;
   setSelectedDate: (date: Date | undefined) => void;
-  selectedDateMeals: MealCardData[];
+  selectedDateMeals: MealCardType[];
 }) {
   const today = new Date();
 

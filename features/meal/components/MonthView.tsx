@@ -1,6 +1,6 @@
 "use client";
 
-import { MealCardData } from "../meal.type";
+import { MealCardType } from "../meal.type";
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import SelectedDay from "./SelectedDay";
 import { useState } from "react";
@@ -12,8 +12,8 @@ export default function MonthView({
   setSelectedDate,
   selectedDateMeals,
 }: {
-  meals: MealCardData[];
-  selectedDateMeals: MealCardData[];
+  meals: MealCardType[];
+  selectedDateMeals: MealCardType[];
   selectedDate: Date | undefined;
   setSelectedDate: (date: Date | undefined) => void;
 }) {

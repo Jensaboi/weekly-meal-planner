@@ -789,6 +789,15 @@ export type Database = {
     }
     Functions: {
       create_household: { Args: { name: string }; Returns: number }
+      create_meal_and_groceries: {
+        Args: {
+          p_date: string
+          p_meal_type: Database["public"]["Enums"]["meal_type"]
+          p_portions: number
+          p_recipe_id: number
+        }
+        Returns: undefined
+      }
       join_household: { Args: { code: string }; Returns: number }
       leave_household: { Args: never; Returns: undefined }
     }
