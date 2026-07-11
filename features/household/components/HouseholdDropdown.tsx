@@ -9,8 +9,8 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChevronDown, House, User } from "lucide-react";
-import { HouseholdWithMembers } from "../household.type";
+import { ChevronDown, House, UserIcon } from "lucide-react";
+import { HouseholdViewType } from "../household.type";
 import CreateHouseholdModal from "./CreateHouseholdModal";
 import useToggle from "@/hooks/useToggle";
 import JoinHouseholdModal from "./JoinHouseholdModal";
@@ -20,7 +20,7 @@ import InviteMemberModal from "./InviteMemberModal";
 export default function HouseholdDropdown({
   household,
 }: {
-  household: HouseholdWithMembers | null;
+  household: HouseholdViewType | null;
 }) {
   const { isOpen, setIsOpen, close } = useToggle();
 
@@ -42,8 +42,8 @@ export default function HouseholdDropdown({
             <PopoverTitle>{household.name}</PopoverTitle>
 
             <span className="flex items-center justify-center gap-2 text-center my-2 font-medium">
-              <User />
-              {household.members.length} member
+              <UserIcon />
+              {household?.members?.length} member
             </span>
           </PopoverHeader>
           <div className="flex flex-col gap-4">

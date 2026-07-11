@@ -23,15 +23,11 @@ export async function createHousehold(formData: FormData) {
 
   const supabase = await createClient();
 
-  console.log(data);
-
-  const { error: insertError } = await supabase.rpc(
-    "create_household_and_add_owner",
-    { name: data.name, user_id: data.user_id },
-  );
+  const { error: insertError } = await supabase.rpc("create_household", {
+    name: data.name,
+  });
 
   if (insertError) {
-    console.log(insertError);
     return { success: false, error: "Failed to create household" };
   }
 
@@ -56,6 +52,22 @@ export async function leaveHousehold() {
 
 export async function joinHousehold(formData: FormData) {
   const inviteCode = formData.get("inviteCode") as string;
+
+  if (!inviteCode || inviteCode.trim() === "") {
+    return { success: false, error: "Invalid invite code." };
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase.rpc("join_household", {
+    code: inviteCode,
+  });
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, error: null };
 }
 
 export async function sendInvitationEmail(formData: FormData) {}

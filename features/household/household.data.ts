@@ -1,8 +1,8 @@
 import { getUser } from "../user/user.data";
 import { createClient } from "@/lib/supabase/server";
-import { HouseholdWithMembers } from "./household.type";
+import { HouseholdViewType } from "./household.type";
 
-export async function getHousehold(): Promise<HouseholdWithMembers | null> {
+export async function getHousehold(): Promise<HouseholdViewType | null> {
   const user = await getUser();
 
   if (!user) return null;
