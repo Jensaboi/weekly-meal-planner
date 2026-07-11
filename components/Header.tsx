@@ -3,11 +3,11 @@ import { Button } from "./ui/button";
 import MainNavigation from "./MainNavigation";
 import MobileNavigation from "./MobileNavigation";
 import Logo from "@/public/Logo";
-import HouseholdDropdown from "@/features/household/components/HouseholdPopover";
 import { getUser } from "@/features/user/user.data";
 import { getHousehold } from "@/features/household/household.data";
 import CreateDropdown from "./CreateDropdown";
 import UserDropdown from "@/features/user/components/UserDropdown";
+import HouseholdDropdown from "@/features/household/components/HouseholdDropdown";
 
 export default async function Header() {
   const user = await getUser();

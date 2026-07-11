@@ -14,7 +14,6 @@ import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { createHousehold } from "../household.action";
 import { toast } from "sonner";
-
 import { useRouter } from "next/navigation";
 import useToggle from "@/hooks/useToggle";
 
@@ -32,11 +31,11 @@ export default function CreateHouseholdModal({
     const formData = new FormData(e.currentTarget);
 
     const res = await createHousehold(formData);
+
     if (res.success) {
       router.refresh();
       toast.success("Household created successfully!");
       close();
-      onClick();
     }
 
     if (!res.success) {

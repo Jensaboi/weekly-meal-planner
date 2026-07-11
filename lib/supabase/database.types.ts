@@ -788,10 +788,8 @@ export type Database = {
       }
     }
     Functions: {
-      create_household_and_add_owner: {
-        Args: { name: string; user_id: string }
-        Returns: number
-      }
+      create_household: { Args: { name: string }; Returns: number }
+      join_household: { Args: { code: string }; Returns: number }
       leave_household: { Args: never; Returns: undefined }
     }
     Enums: {
