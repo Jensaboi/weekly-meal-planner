@@ -591,6 +591,63 @@ export type Database = {
       }
     }
     Views: {
+      groceries_view: {
+        Row: {
+          added_by: Database["public"]["Enums"]["added_by_type"] | null
+          amount: number | null
+          created_at: string | null
+          household_id: number | null
+          id: number | null
+          ingredient_id: number | null
+          is_bought: boolean | null
+          livsmedel_id: number | null
+          meal_date: string | null
+          meal_id: number | null
+          meal_name: string | null
+          meal_type: Database["public"]["Enums"]["meal_type"] | null
+          name: string | null
+          unit: Database["public"]["Enums"]["ingredient_unit"] | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "groceries_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "household_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "groceries_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "groceries_ingredient_id_fkey"
+            columns: ["ingredient_id"]
+            isOneToOne: false
+            referencedRelation: "ingredients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "groceries_meal_id_fkey"
+            columns: ["meal_id"]
+            isOneToOne: false
+            referencedRelation: "meal_card"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "groceries_meal_id_fkey"
+            columns: ["meal_id"]
+            isOneToOne: false
+            referencedRelation: "meals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       household_view: {
         Row: {
           created_at: string | null

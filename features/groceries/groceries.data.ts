@@ -1,26 +1,32 @@
 "use server";
-
 import { createClient } from "@/lib/supabase/server";
-import { GroceryItem } from "./groceries.type";
+import { requireUser } from "../auth/auth.data";
+import { getHousehold } from "../household/household.data";
+import { GroceryType } from "./groceries.type";
+import { formatDate } from "@/lib/utils";
 
-export async function getGroceries(): Promise<GroceryItem[] | null> {
+export async function getGroceries(): Promise<GroceryType[]> {
+  const userId = await requireUser("/groceries");
+
+  const household = await getHousehold();
+
   const supabase = await createClient();
 
-  const { data, error } = await supabase.from("groceries").select("*");
+  let response = supabase.from("groceries_view").select("*");
 
-  if (error) throw error;
+  if (household) {
+    response = response.or(
+      `user_id.eq.${userId},household_id.eq.${household.id}`,
+    );
+  } else {
+    response = response.or(`user_id.eq.${userId}`);
+  }
 
-  return data;
-}
+  response.or(`meal_date.gte.${formatDate(new Date())}, meal_date.is.${null}`);
 
-export async function getMealGroceries(mealIds: number[]) {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from("meal_groceries")
-    .select("*")
-    .in("meal_id", mealIds)
-    .gte("meal_date", new Date().toISOString());
+  const { data, error } = await response.order("created_at", {
+    ascending: true,
+  });
 
   if (error) throw error;
 
