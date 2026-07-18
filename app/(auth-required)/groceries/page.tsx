@@ -1,9 +1,6 @@
 import { requireUser } from "@/features/auth/auth.data";
-import GroceriesList from "@/features/groceries/components/GroceriesList";
-import {
-  getGroceries,
-  getMealGroceries,
-} from "@/features/groceries/groceries.data";
+import GroceryLists from "@/features/groceries/components/GroceryLists";
+import { getGroceries } from "@/features/groceries/groceries.data";
 import { getMeals } from "@/features/meal/meal.data";
 
 export default async function GroceriesPage() {
@@ -13,15 +10,9 @@ export default async function GroceriesPage() {
 
   const meals = await getMeals();
 
-  const mealIds = meals.map(meal => meal.id).filter(Boolean) as number[];
-  const mealGroceries = await getMealGroceries(mealIds);
-
   return (
     <>
-      <GroceriesList
-        groceries={groceries ?? []}
-        mealGroceries={mealGroceries}
-      />
+      <GroceryLists groceries={groceries ?? []} meals={meals} />
     </>
   );
 }
