@@ -29,11 +29,14 @@ import { Badge } from "@/components/ui/badge";
 import PlanMealModal from "@/features/meal/components/PlanMealModal";
 import CreateReviewModal from "./CreateReviewModal";
 import Review from "./Review";
+import { getMeals } from "@/features/meal/meal.data";
 
 export default async function RecipeDetails({ id }: { id: number }) {
   const recipe = await getRecipeDetails(id);
 
   const myReview = await getMyReview(id);
+
+  const meals = await getMeals();
 
   if (!recipe) return notFound();
 
@@ -112,6 +115,7 @@ export default async function RecipeDetails({ id }: { id: number }) {
 
             <div className="flex items-center gap-4 my-4">
               <PlanMealModal
+                meals={meals}
                 recipePortions={recipe.portions ?? 1}
                 recipeId={id}
               />

@@ -11,15 +11,17 @@ import type { MealCardType } from "../meal.type.ts";
 import MealItem from "./MealItem";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import Link from "next/link.js";
 
 export default function SelectedDay({
   date,
   meals,
+  setSelectedDate,
 }: {
   date: Date | undefined;
   meals: MealCardType[];
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 }) {
   const options = {
     weekday: "long",
@@ -34,14 +36,46 @@ export default function SelectedDay({
   const snack = meals.find(meal => meal.meal_type === "snack");
 
   return (
-    <Card>
+    <Card className="border-none shadow-none ring-0">
       <CardContent className="w-full h-full">
-        <CardHeader>
-          <CardTitle className="text-lg text-center font-semibold mb-4">
+        <CardHeader className="flex items-center justify-center gap-4  mb-4">
+          <button
+            className="hover:cursor-pointer"
+            onClick={() =>
+              setSelectedDate(
+                date
+                  ? new Date(
+                      date?.getFullYear(),
+                      date?.getMonth(),
+                      date?.getDate() - 1,
+                    )
+                  : new Date(),
+              )
+            }
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <CardTitle className="text-lg text-center font-semibold">
             {capitalizeFirstLetter(
               date?.toLocaleDateString("sv-SE", options) ?? "No date selected",
             )}
           </CardTitle>
+          <button
+            className="hover:cursor-pointer"
+            onClick={() =>
+              setSelectedDate(
+                date
+                  ? new Date(
+                      date?.getFullYear(),
+                      date?.getMonth(),
+                      date?.getDate() + 1,
+                    )
+                  : new Date(),
+              )
+            }
+          >
+            <ChevronRight size={18} />
+          </button>
         </CardHeader>
         {meals.length === 0 ? (
           <div className="h-full flex flex-col gap-4">

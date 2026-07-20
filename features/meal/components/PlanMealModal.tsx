@@ -25,17 +25,25 @@ import {
 } from "@/components/ui/select";
 import useToggle from "@/hooks/useToggle";
 import { toast } from "sonner";
+import { formatDate } from "@/lib/utils";
+import MealsCalendar from "./MealsCalendar";
+import { MealCardType } from "../meal.type";
 
 export default function PlanMealModal({
   recipeId = null,
   recipePortions,
+  meals,
 }: {
   recipeId: number | null;
   recipePortions: number;
+  meals: MealCardType[];
 }) {
   const currentHour = new Date().getHours();
+
   const { isOpen, setIsOpen } = useToggle();
+
   const [date, setDate] = useState<Date | undefined>(new Date());
+
   const [currentMonth, setCurrentMonth] = useState<Date>(
     new Date(new Date().getFullYear(), new Date().getMonth(), 1),
   );
@@ -80,14 +88,14 @@ export default function PlanMealModal({
             Choose a date to plan this recipe on:
           </DialogDescription>
         </DialogHeader>
-        <Calendar
+        <MealsCalendar
           weekStartsOn={1}
           mode="single"
           selected={date}
           onSelect={setDate}
           month={currentMonth}
           onMonthChange={setCurrentMonth}
-          className="p-0 [--cell-size:--spacing(9.5)] w-full"
+          meals={meals}
         />
         <DialogFooter>
           <div className="w-full flex flex-col gap-8">
@@ -122,7 +130,7 @@ export default function PlanMealModal({
                 type="hidden"
                 name="date"
                 id="date"
-                value={date?.toISOString() ?? ""}
+                value={formatDate(date ?? new Date()) ?? ""}
               />
               <div className="flex items-center gap-8">
                 <label
