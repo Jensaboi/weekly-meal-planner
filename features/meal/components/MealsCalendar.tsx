@@ -1,76 +1,82 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { DayButton, DayButtonProps, UI, useDayPicker } from "@daypicker/react";
 import clsx from "clsx";
-import { CalendarIcon, List } from "lucide-react";
-import { useState } from "react";
 import { MealCardType } from "../meal.type";
-import MonthView from "./MonthView";
-import WeekView from "./WeekView";
 import { formatDate } from "@/lib/utils";
 
-export default function MealsCalendar({ meals }: { meals: MealCardType[] }) {
-  const [calendarType, setCalendarType] = useState<"list" | "month">("month");
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date(),
-  );
-
-  const selectedDateMeals = meals.filter(
-    meal =>
-      formatDate(new Date(meal.date || "")) ===
-      formatDate(selectedDate || new Date()),
-  );
-
-  console.log("selectedDateMeals", selectedDateMeals);
-  console.log("selectedDate", selectedDate);
-  console.log("meals", meals);
-
+export default function MealsCalendar({
+  className,
+  selected,
+  onSelect,
+  month,
+  onMonthChange,
+  meals = [],
+  ...rest
+}: {
+  className?: string | undefined;
+  selected: Date | undefined;
+  onSelect: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  month: Date;
+  onMonthChange: React.Dispatch<React.SetStateAction<Date>>;
+  rest?: unknown;
+  meals: MealCardType[];
+}) {
   return (
-    <section className="mx-auto container px-4">
-      <div className="flex justify-end items-center py-4">
-        <div className="flex items-center">
-          <Button
-            onClick={() => {
-              setCalendarType("list");
-              setSelectedDate(new Date());
-            }}
-            title="List"
-            variant={"ghost"}
-            className={clsx(calendarType === "list" && "bg-muted")}
-          >
-            <List />
-          </Button>
-          <Button
-            onClick={() => {
-              setCalendarType("month");
-              setSelectedDate(new Date());
-            }}
-            title="Monthly"
-            variant={"ghost"}
-            className={clsx(calendarType === "month" && "bg-muted")}
-          >
-            <CalendarIcon />
-          </Button>
-        </div>
-      </div>
+    <Calendar
+      mode="single"
+      selected={selected}
+      onSelect={onSelect}
+      month={month}
+      onMonthChange={onMonthChange}
+      components={{
+        DayButton: (props: DayButtonProps) => {
+          const { classNames } = useDayPicker();
 
-      {calendarType === "list" && (
-        <WeekView
-          meals={meals}
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-          selectedDateMeals={selectedDateMeals}
-        />
-      )}
+          const currDate = props.day.date;
 
-      {calendarType === "month" && (
-        <MonthView
-          setSelectedDate={setSelectedDate}
-          selectedDate={selectedDate}
-          meals={meals}
-          selectedDateMeals={selectedDateMeals}
-        />
-      )}
-    </section>
+          const mealsOnDate = meals.filter(meal => {
+            if (!meal.date) return false;
+
+            const mealDate = new Date(meal.date);
+
+            if (formatDate(currDate) === formatDate(mealDate)) return true;
+
+            return false;
+          });
+
+          return (
+            <DayButton
+              {...props}
+              className={clsx(
+                classNames[UI.DayButton],
+                "w-full h-full hover:cursor-pointer flex flex-col justify-between p-2 rounded-md",
+              )}
+            >
+              {props.day.date.getDate()}
+              <div className="flex items-center justify-center gap-2 h-3">
+                {mealsOnDate.map(meal => (
+                  <span
+                    className={clsx(
+                      meal.meal_type === "breakfast" && "bg-blue-500",
+                      meal.meal_type === "lunch" && "bg-green-600",
+                      meal.meal_type === "dinner" && "bg-red-500",
+                      meal.meal_type === "snack" && "bg-purple-500",
+                      "block rounded-full w-full h-full",
+                    )}
+                    key={meal.id}
+                  ></span>
+                ))}
+              </div>
+            </DayButton>
+          );
+        },
+      }}
+      className={clsx("p-0 [--cell-size:--spacing(9.5)] w-full", className)}
+      classNames={{
+        selected: "border border-1 border-accent rounded-md",
+        today: "rounded-md bg-accent-foreground",
+      }}
+      {...rest}
+    />
   );
 }

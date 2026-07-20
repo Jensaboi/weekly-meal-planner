@@ -1,5 +1,5 @@
 import { requireUser } from "@/features/auth/auth.data";
-import MealsCalendar from "@/features/meal/components/MealsCalendar";
+import CalendarView from "@/features/meal/components/CalendarView";
 import { getMeals } from "@/features/meal/meal.data";
 
 export default async function MealsPage() {
@@ -9,7 +9,7 @@ export default async function MealsPage() {
 
   return (
     <>
-      <MealsCalendar meals={meals} />
+      <CalendarView meals={meals} />
     </>
   );
 }
