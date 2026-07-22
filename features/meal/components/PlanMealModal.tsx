@@ -89,8 +89,6 @@ export default function PlanMealModal({
           </DialogDescription>
         </DialogHeader>
         <MealsCalendar
-          weekStartsOn={1}
-          mode="single"
           selected={date}
           onSelect={setDate}
           month={currentMonth}
@@ -139,15 +137,7 @@ export default function PlanMealModal({
                 >
                   Select meal:
                   <Select
-                    defaultValue={
-                      currentHour < 8
-                        ? "breakfast"
-                        : currentHour < 12
-                          ? "lunch"
-                          : currentHour < 18
-                            ? "dinner"
-                            : "snack"
-                    }
+                    defaultValue={currentHour < 12 ? "lunch" : "dinner"}
                     name="mealType"
                   >
                     <SelectTrigger className="mb-4 w-full">
