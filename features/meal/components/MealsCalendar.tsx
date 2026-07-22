@@ -23,6 +23,7 @@ export default function MealsCalendar({
 }) {
   return (
     <Calendar
+      weekStartsOn={1}
       mode="single"
       selected={selected}
       onSelect={onSelect}
