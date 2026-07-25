@@ -4,13 +4,14 @@ import { Item, ItemContent, ItemHeader, ItemTitle } from "@/components/ui/item";
 import { MealGroceryType } from "../groceries.type";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import useToggle from "@/hooks/useToggle";
+import GroceryItem from "./GroceryItem";
 
 export default function MealGroceries({ meal }: { meal: MealGroceryType }) {
   const { toggle, isOpen } = useToggle();
 
   return (
     <Item variant={"outline"}>
-      <ItemHeader>
+      <ItemHeader className="flex items-center justify-between">
         <ItemTitle>
           {meal.name} {meal.portions} portions
         </ItemTitle>
@@ -21,7 +22,15 @@ export default function MealGroceries({ meal }: { meal: MealGroceryType }) {
         </div>
       </ItemHeader>
 
-      {isOpen && <ItemContent></ItemContent>}
+      {isOpen && (
+        <ItemContent className="block">
+          <ul className="flex flex-col gap-2">
+            {meal.groceries.map(grocery => (
+              <GroceryItem key={grocery.id} grocery={grocery} />
+            ))}
+          </ul>
+        </ItemContent>
+      )}
     </Item>
   );
 }

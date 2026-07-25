@@ -3,18 +3,28 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { requireUser } from "../auth/auth.data";
+import { getHousehold } from "../household/household.data";
 
-export async function toggleIsBought(groceryId: number, bool: boolean) {
-  await requireUser("/groceries");
+export async function setIsBought(groceryId: number, bool: boolean) {
+  const userId = await requireUser("/groceries");
+  const household = await getHousehold();
 
   const supabase = await createClient();
 
   if (!groceryId) return { success: false, error: "Grocery id is required." };
 
-  const { error } = await supabase
+  const query = supabase
     .from("groceries")
     .update({ is_bought: bool })
     .eq("id", groceryId);
+
+  if (household?.id) {
+    query.eq("household_id", household.id);
+  } else {
+    query.eq("user_id", userId);
+  }
+
+  const { error } = await query;
 
   if (error) {
     return { success: false, error: error.message };
@@ -26,14 +36,20 @@ export async function toggleIsBought(groceryId: number, bool: boolean) {
 }
 
 export async function deleteGrocery(groceryId: number) {
-  await requireUser("/groceries");
+  const userId = await requireUser("/groceries");
+  const household = await getHousehold();
 
   const supabase = await createClient();
 
-  const { error } = await supabase
-    .from("groceries")
-    .delete()
-    .eq("id", groceryId);
+  const query = supabase.from("groceries").delete().eq("id", groceryId);
+
+  if (household?.id) {
+    query.eq("household_id", household.id);
+  } else {
+    query.eq("user_id", userId);
+  }
+
+  const { error } = await query;
 
   if (error) throw error;
 
@@ -44,18 +60,50 @@ export async function setGroceriesIsBought(
   groceryIds: number[],
   bool: boolean,
 ) {
-  await requireUser();
+  const userId = await requireUser();
+
+  const household = await getHousehold();
 
   const supabase = await createClient();
 
-  const { error } = await supabase
+  const query = supabase
     .from("groceries")
     .update({ is_bought: bool })
     .in("id", groceryIds);
+
+  if (household?.id) {
+    query.eq("household_id", household.id);
+  } else {
+    query.eq("user_id", userId);
+  }
+
+  const { error } = await query;
 
   if (error) {
     return { success: false, error: error.message };
   }
 
   return { success: true, error: null };
+}
+
+export async function deleteGroceries(groceryIds: number[]) {
+  const userId = await requireUser();
+
+  const household = await getHousehold();
+
+  const supabase = await createClient();
+
+  const query = supabase.from("groceries").delete().in("id", groceryIds);
+
+  if (household?.id) {
+    query.eq("household_id", household.id);
+  } else {
+    query.eq("user_id", userId);
+  }
+
+  const { error } = await query;
+
+  if (error) throw error;
+
+  return true;
 }
