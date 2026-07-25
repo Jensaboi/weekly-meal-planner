@@ -11,7 +11,7 @@ export default function ActionButton({
   size,
 }: {
   action: () => Promise<unknown> | void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
   variant?:
     | "default"
