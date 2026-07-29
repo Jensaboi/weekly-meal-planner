@@ -22,6 +22,19 @@ export async function planMealAction(formData: FormData) {
     return { success: false, error: meal.error.issues[0].message };
   }
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const date = new Date(input.date);
+  date.setHours(0, 0, 0, 0);
+
+  if (today > date) {
+    return {
+      success: false,
+      error: "You cannot plan a meal for an date that have passed.",
+    };
+  }
+
   const supabase = await createClient();
 
   const { error } = await supabase.rpc("create_meal_and_groceries", {

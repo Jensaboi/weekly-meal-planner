@@ -58,11 +58,7 @@ export default function MealsCalendar({
                 {mealsOnDate.map(meal => (
                   <span
                     className={clsx(
-                      meal.meal_type === "breakfast" && "bg-blue-500",
-                      meal.meal_type === "lunch" && "bg-green-600",
-                      meal.meal_type === "dinner" && "bg-red-500",
-                      meal.meal_type === "snack" && "bg-purple-500",
-                      "block rounded-full w-full h-full",
+                      `block rounded-full w-[25%] h-full bg-accent`,
                     )}
                     key={meal.id}
                   ></span>
